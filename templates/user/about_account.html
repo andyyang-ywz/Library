@@ -1,0 +1,81 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}About Your Account{% endblock %}
+
+{% block content %}
+<main class="w-11/12 md:w-5/6 mx-auto pt-24 md:pt-28 pb-20">
+   <h1 class="font-bold text-[32px] md:text-4xl mb-12">Edit Your Account</h1>
+   <form method="post">
+      {% csrf_token %}
+      <section class="flex gap-10 flex-col md:flex-row semi-lg:gap-16 w-full">
+         <div class="flex-shrink-0 pb-10 md:pb-0 lg:px-10">
+            <img src="{{ user.userdetail.image.url }}" class="w-48 h-48 border-2 border-neutral-800 rounded-full mx-auto md:mx-0">
+         </div>
+         <div class="w-full h-2 md:h-auto md:min-h-full md:w-2 bg-red-500 rounded-full shadow-shining-red flex-shrink-0"></div>
+         <div class="w-full max-w-[600px] mx-auto md:mx-0">
+            <div class="mb-7">
+               <label for="id_username" class="font-semibold">Username: </label>
+               {{ form.username }}
+            </div>
+            <div class="mb-7">
+               <label for="id_first_name" class="font-semibold">First Name: </label>
+               {{ form.first_name }}
+            </div>
+            <div class="mb-7">
+               <label for="id_last_name" class="font-semibold">Last Name: </label>
+               {{ form.last_name }}
+            </div>
+            <div class="mb-7">
+               <label for="id_email" class="font-semibold">Email: </label>
+               {{ form.email }}
+            </div>
+            <div class="mb-7" id="gender_input_wrapper">
+               <label for="id_gender" class="font-semibold">Gender: </label>
+               {{ form2.gender }}
+               <div class="relative">
+                  <p class="block w-full border border-slate-500 rounded-sm mt-1 p-2 text-sm cursor-pointer">
+                     {% if form2.gender.value %}
+                     {{ form2.gender.value }}
+                     {% else %}
+                     -- Click Here To Select --
+                     {% endif %}
+                  </p>
+                  <div class="hidden absolute top-full -translate-y-4 w-full bg-white border border-slate-400 overflow-auto opacity-0 transition-all duration-300" id="gender_select">
+                     <option data-gender-type="Male" class="block w-full p-3 text-sm cursor-pointer hover:bg-slate-200">Male</option>
+                     <option data-gender-type="female" class="block w-full p-3 text-sm cursor-pointer hover:bg-slate-200">Female</option>
+                  </div>
+               </div>
+            </div>
+            <div class="mb-7">
+               <label for="id_birthday" class="font-semibold">Birthday: </label>
+               {{ form2.birthday }}
+               <input type="date" class="block w-full border border-slate-500 rounded-sm mt-1 p-2 text-sm outline-none">
+            </div>
+            <div class="flex justify-end mb-5">
+               <button class="border border-red-600 rounded-sm py-2 px-4 text-sm text-red-600 transition-all hover:text-white hover:bg-red-500">Update Account!</button>
+            </div>
+         </div>
+      </section>
+   </form>
+
+   <section class="mt-24 text-sm md:text-base">
+      <h1 class="font-bold text-[32px] md:text-4xl">About Account</h1>
+      <div class="mt-10">
+         <p class="font-semibold mb-5">Your account is a user-statused account. Your role is a user for this webiste and as a buyer for book sellers. But you can be a seller by making a channel for yourself. If your role is a seller-statused account, you will still be able to buy books from other store, but you won't be able to give likes and give ratings. And surely, your role as a seller is to have product, so you must have at least 1 product before your channel gets publicized. Click this button below to get your seller status and upload your first product.</p>
+         <a href="" class="border border-green-700 rounded-sm py-2 px-6 text-[13px] md:text-sm text-green-700 transition-all hover:text-white hover:bg-green-700">Create Seller Account</a>
+      </div>
+      <div class="mt-10">
+         <p class="font-semibold mb-5">As a user, we would like to know your feedbacks to help us grow our website. If you have any problem with our website, feel free to click this button below to report your problems. Just a feedback will also help.</p>
+         <a href="" class="border border-neutral-800 rounded-sm py-2 px-6 text-[13px] md:text-sm text-neutral-800 transition-all hover:text-white hover:bg-neutral-800">Report or Feedback</a>
+      </div>
+      <div class="mt-16">
+         <h3 class="mb-3 text-2xl md:text-[26px] text-red-700 font-semibold">Danger Zone</h3>
+         <p class="font-semibold mb-5">Please think through your decisions, because after you click this button, all your data will be deleted, your transaction history, your account, everything will be deleted! You won't be able to make a new account using your current email for 7 days.</p>
+         <a href="" class="border border-red-700 rounded-sm py-2 px-6 text-[13px] md:text-sm text-red-700 transition-all hover:text-white hover:bg-red-600">Delete This Account</a>
+      </div>
+   </section>
+</main>
+
+<script src="{% static 'js/user.js' %}"></script>
+{% endblock %}

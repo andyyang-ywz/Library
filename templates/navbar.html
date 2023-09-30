@@ -1,0 +1,172 @@
+{% load static %}
+<nav class="fixed flex items-center w-full top-0 bg-white border-b border-slate-400 z-[90]">
+   <div class="flex gap-12 semi-lg:gap-28 xl:gap-40 justify-between w-[94%] sm:w-[87%] lg:w-5/6 h-16 md:h-20 mx-auto">
+      <header class="flex gap-1 items-center">
+         <img src="{% static 'image/logo.png' %}" class="w-10 md:w-12" alt="website logo - VLibrary logo">
+         <h1 class="font-bold text-xl md:text-2xl font-logo2 text-red-800">
+            <a href="{% url 'Library:main' %}">
+               <span class="mr-1 font-logo1 text-orange-700">V</span>Library
+            </a>
+         </h1>
+      </header>
+      <menu class="flex md:min-w-[550px] md:w-full justify-between relative">
+         <section class="hidden h-full md:flex">
+            <button class="font-semibold w-28 lg:w-36 h-full relative after:top-0 after:left-1/2 after:absolute after:h-[5px] after:w-0 after:bg-red-400 after:rounded-full after:transition-all after:duration-300 hover:after:w-full hover:after:left-0" id="category_menu_btn">Category</button>
+            <button class="font-semibold w-28 lg:w-36 h-full relative after:top-0 after:left-1/2 after:absolute after:h-[5px] after:w-0 after:bg-red-400 after:rounded-full after:transition-all after:duration-300 hover:after:w-full hover:after:left-0" id="history_menu_btn">History</button>
+            <button class="font-semibold w-28 lg:w-36 h-full relative after:top-0 after:left-1/2 after:absolute after:h-[5px] after:w-0 after:bg-red-400 after:rounded-full after:transition-all after:duration-300 hover:after:w-full hover:after:left-0" id="cart_menu_btn">Cart</button>
+         </section>
+
+         <section class="flex gap-6 xl:gap-10 items-center pr-2 text-sm">
+            {% if user.is_authenticated %}
+            <a href="{% url 'User:logout' %}" class="text-slate-800 font-semibold transition-all hover:text-red-800">Logout</a>
+            <a href="{% url 'User:profile' %}" class="border border-red-900 rounded-md px-5 md:px-7 py-[6px] md:py-2 text-slate-900 font-semibold transition-all hover:bg-red-200">Profile</a>
+            {% else %}
+            <a href="{% url 'User:sign_in' %}" class="text-slate-800 font-semibold transition-all hover:text-red-800">Sign In</a>
+            <a href="{% url 'User:sign_up' %}" class="border border-red-900 rounded-md px-5 md:px-7 py-[6px] md:py-2 text-slate-900 font-semibold transition-all hover:bg-red-200">Sign Up</a>
+            {% endif %}
+            <button class="md:hidden z-10" id="hamburger_button">
+               <span class="block w-8 h-1 bg-red-400 rounded-full my-1 transition-all duration-300 origin-left"></span>
+               <span class="block w-8 h-1 bg-red-400 rounded-full my-1 transition-all duration-300"></span>
+               <span class="block w-8 h-1 bg-red-400 rounded-full my-1 transition-all duration-300 origin-left"></span>
+            </button>
+
+            <nav class="md:hidden hidden fixed top-0 -right-5 w-[400px] h-full bg-white transition-all duration-700 shadow-around translate-x-full" id="small_nav">
+               <h1 class="text-2xl font-bold px-10 h-16 leading-[64px] border-b border-red-300">Menu</h1>
+               <div class="overflow-auto small-scrollbar" id="small_nav_wrapper">
+                  <a href="" class="block px-10 py-4 text-lg hover:bg-red-50 hover:font-bold hover:text-red-800">History</a>
+                  <a href="" class="block px-10 py-4 text-lg hover:bg-red-50 hover:font-bold hover:text-red-800">Cart</a>
+                  <div class="px-10 pt-5 pb-10">
+                     <h2 class="font-bold text-lg text-red-800 mb-8">Category</h2>
+                     <div class="pl-7">
+                        <section>
+                           <h1 class="font-semibold text-[17px] mt-3 mb-1">Fictional Book</h1>
+                           <div>
+                              {% for category in fictional_categories %}
+                              <a href=""
+                                 class="inline-block w-[49%] my-3">{{ category.name }}</a>
+                              {% endfor %}
+                           </div>
+                        </section>
+                        <section>
+                           <h1 class="font-semibold text-[17px] mt-3 mb-1">Non-fictional Book</h1>
+                           <div>
+                              {% for category in nonfictional_categories %}
+                              <a href=""
+                                 class="inline-block w-[49%] my-3">{{ category.name }}</a>
+                              {% endfor %}
+                           </div>
+                        </section>
+                     </div>
+                  </div>
+               </div>
+            </nav>
+         </section>
+
+         <div class="hidden md:hidden absolute top-full left-0 w-full bg-white shadow-around rounded-md px-10 py-6 opacity-0 scale-[0.98] translate-y-1 transition-all duration-300 
+         after:absolute after:top-0 after:left-[45px] lg:after:left-[60px] after:-translate-y-3 after:border-x-[12px] after:border-x-transparent after:border-b-[12px] after:border-b-white nav_menu_wrapper" id="category_menu_wrapper">
+            <section>
+               <h1 class="font-bold text-lg mt-3 mb-1 text-red-800">Fictional Book</h1>
+               <div>
+                  {% for category in fictional_categories %}
+                  <a href="" class="inline-block w-[110px] lg:w-[125px] text-center text-[15px] lg:text-base py-5 transition-all hover:text-red-700 hover:scale-110 hover:font-bold">{{ category.name }}</a>
+                  {% endfor %}
+               </div>
+            </section>
+            <section>
+               <h1 class="font-bold text-lg mt-3 mb-1 text-red-800">Non-fictional Book</h1>
+               <div>
+                  {% for category in nonfictional_categories %}
+                  <a href="" class="inline-block w-[110px] lg:w-[125px] text-center text-[15px] lg:text-base py-5 transition-all hover:text-red-700 hover:scale-110 hover:font-bold">{{ category.name }}</a>
+                  {% endfor %}
+               </div>
+            </section>
+         </div>
+
+         <div class="hidden md:hidden absolute top-full left-0 w-full bg-white shadow-around rounded-md px-10 py-6 opacity-0 scale-[0.98] translate-y-1 transition-all duration-300 
+         after:absolute after:top-0 after:left-[160px] lg:after:left-[205px] after:-translate-y-3 after:border-x-[12px] after:border-x-transparent after:border-b-[12px] after:border-b-white nav_menu_wrapper" id="history_menu_wrapper">
+            <section class="mb-5">
+               <h2 class="flex items-center gap-2 mt-3 mb-5 text-red-800">
+                  <img src="{% static 'image/icons/history.png' %}" class="w-5 h-5 filter-to-red transition-all duration-300">
+                  <span class="font-bold text-xl">Your Cart</span>
+               </h2>
+               <div class="shadow-book-div rounded-md overflow-hidden">
+                  <div class="flex gap-2">
+                     <div class="w-[90px] h-[120px]">
+                        <img src="{% static 'image/books/9.jpg' %}" alt="Image Of 'Name' Book" class="object-cover rounded-sm">
+                     </div>
+                     <div class="p-2">
+                        <h2>The 48 Laws of Power - Robert Green</h2>
+                        <p class="my-[2px] text-sm italic"><span class="font-bold">Address</span>: Jln. Durian No.116C</p>
+                        <p class="my-[2px] text-sm italic"><span class="font-bold">Arrival Date</span>: 27 August 2023</p>
+                        <p class="my-[2px] text-sm italic text-green-600"><span class="text-xs">$</span><span class="pl-1 font-bold">16.59</span></p>
+                     </div>
+                  </div>
+                  <div class="flex justify-between px-6 py-4">
+                     <div class="flex gap-2">
+                        <p class="font-bold text-sm">245</p>
+                        <img src="{% static 'image/icons/like.png' %}" class="w-4 h-4">
+                     </div>
+                     <div class="flex gap-2">
+                        <p class="font-bold text-sm">4.8</p>
+                        <div class="flex gap-1">
+                           {% with ''|center:5 as range %}
+                           {% for _ in range %}
+                              {% if forloop.counter is not 5 %}
+                              <img src="{% static 'image/icons/full-star.png' %}" class="w-4 h-4 filter-to-yellow">
+                              {% else %}
+                              <img src="{% static 'image/icons/half-star.png' %}" class="w-4 h-4 filter-to-yellow">
+                              {% endif %}
+                           {% endfor %}
+                           {% endwith %}
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </section>
+         </div>
+
+         <div class="hidden md:hidden absolute top-full left-0 w-full bg-white shadow-around rounded-md px-10 py-6 opacity-0 scale-[0.98] translate-y-1 transition-all duration-300 
+         after:absolute after:top-0 after:left-[270px] lg:after:left-[350px] after:-translate-y-3 after:border-x-[12px] after:border-x-transparent after:border-b-[12px] after:border-b-white nav_menu_wrapper" id="cart_menu_wrapper">
+            <section class="mb-5">
+               <h2 class="flex items-center gap-2 mt-3 mb-5 text-red-800">
+                  <img src="{% static 'image/icons/cart.png' %}" class="w-5 h-5 filter-to-red transition-all duration-300">
+                  <span class="font-bold text-xl">Your Cart</span>
+               </h2>
+               <div class="shadow-book-div rounded-md overflow-hidden">
+                  <div class="flex gap-2">
+                     <div class="w-[90px] h-[120px]">
+                        <img src="{% static 'image/books/9.jpg' %}" alt="Image Of 'Name' Book" class="object-cover rounded-sm">
+                     </div>
+                     <div class="p-2">
+                        <h2>The 48 Laws of Power - Robert Green</h2>
+                        <p class="my-[2px] text-sm italic"><span class="font-bold">Address</span>: Jln. Durian No.116C</p>
+                        <p class="my-[2px] text-sm italic"><span class="font-bold">Category</span>: Self-Help</p>
+                        <p class="my-[2px] text-sm italic text-green-600"><span class="text-xs">$</span><span class="pl-1 font-bold">16.59</span></p>
+                     </div>
+                  </div>
+                  <div class="flex justify-between px-6 py-4">
+                     <div class="flex gap-2">
+                        <p class="font-bold text-sm">245</p>
+                        <img src="{% static 'image/icons/like.png' %}" class="w-4 h-4">
+                     </div>
+                     <div class="flex gap-2">
+                        <p class="font-bold text-sm">4.8</p>
+                        <div class="flex gap-1">
+                           {% with ''|center:5 as range %}
+                           {% for _ in range %}
+                           {% if forloop.counter is not 5 %}
+                           <img src="{% static 'image/icons/full-star.png' %}" class="w-4 h-4 filter-to-yellow">
+                           {% else %}
+                           <img src="{% static 'image/icons/half-star.png' %}" class="w-4 h-4 filter-to-yellow">
+                           {% endif %}
+                           {% endfor %}
+                           {% endwith %}
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </section>
+         </div>
+      </menu>
+   </div>
+</nav>

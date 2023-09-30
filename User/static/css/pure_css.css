@@ -1,0 +1,87 @@
+* {
+  scroll-behavior: smooth;
+}
+
+#jumbotron_img1 {
+  filter: drop-shadow(3px 13px 13px rgba(0, 0, 0, 0.5));
+}
+#jumbotron_img2 {
+  filter: drop-shadow(0px 15px 15px rgba(0, 0, 0, 0.5));
+}
+
+#search_book_input::-webkit-input-placeholder::before {
+  content: " ";
+  position: absolute;
+  width: 14px; /* size of a single icon */
+  height: 14px;
+  background-image: url("../../static/image/icons/arrow_right.png"); /* all icons in a single file */
+  background-repeat: no-repeat;
+}
+
+::-webkit-scrollbar {
+  width: 14px;
+}
+.small-scrollbar::-webkit-scrollbar {
+  width: 11px;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #e7e5e4;
+  border: 1px solid #a8a29e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(0deg, #b91c1c, #f97316);
+  border-radius: 50px;
+  border: 2px solid #a8a29e;
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(0deg, #f97316, #b91c1c);
+}
+
+#quotes_wrapper {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+#quotes_wrapper blockquote {
+  scroll-snap-align: start;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.filter-to-yellow {
+  filter: invert(79%) sepia(81%) saturate(3483%) hue-rotate(349deg)
+    brightness(110%) contrast(96%);
+}
+
+.filter-to-white {
+  filter: brightness(0) invert(1);
+}
+
+.filter-to-green {
+  filter: invert(47%) sepia(47%) saturate(6405%) hue-rotate(123deg)
+    brightness(98%) contrast(83%);
+}
+
+.filter-parent:hover .hover-filter-green-to-white {
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(260deg)
+    brightness(110%) contrast(101%);
+}
+
+.filter-to-gray {
+  filter: invert(12%) sepia(9%) saturate(2737%) hue-rotate(176deg)
+    brightness(90%) contrast(87%);
+}
+
+.filter-to-red {
+  filter: invert(13%) sepia(40%) saturate(6011%) hue-rotate(348deg)
+    brightness(101%) contrast(94%);
+}

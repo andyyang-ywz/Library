@@ -1,0 +1,96 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Detail: {% endblock %}
+
+{% block content %}
+<main>
+   <div class="relative md:flex gap-6 semi-lg:gap-8 w-11/12 semi-lg:w-5/6 mx-auto py-32">
+      <div class="md:sticky top-20 w-3/4 max-w-[410px] md:max-w-none md:w-1/2 aspect-[3_/_4] lg:w-[450px] 2xl:w-[550px] self-start shadow-around rounded-md overflow-hidden flex-shrink-0">
+         <img src="{% static 'image/books/' %}{{ book_img }}.jpg" alt="Image Of {{ book.name }}" class="w-full object-cover">
+      </div>
+      <div class="mt-10 md:mt-0">
+         <div class="border-b border-neutral-700 pb-5">
+            <h1 class="text-[27px] md:text-[32px] semi-lg:text-4xl 2xl:text-[42px] font-bold">{{ book.name }}</h1>
+            <span class="inline-block bg-red-500 rounded-sm my-2 px-5 py-2 text-white text-[13px] semi-lg:text-sm 2xl:text-base select-none">Best Seller</span>
+            <div aria-label="book_rating" class="flex gap-1 my-2">
+               <span class="font-bold semi-lg:text-lg pr-1">4.3</span>
+               {% with ''|center:5 as range %}
+               {% for _ in range %}
+                  {% if forloop.counter is not 5 %}
+                  <img src="{% static 'image/icons/full-star.png' %}" class="w-5 semi-lg:w-6 h-5 semi-lg:h-6 filter-to-yellow">
+                  {% else %}
+                  <img src="{% static 'image/icons/half-star.png' %}" class="w-5 semi-lg:w-6 h-5 semi-lg:h-6 filter-to-yellow">
+                  {% endif %}
+               {% endfor %}
+               {% endwith %}
+               <span class="semi-lg:text-lg text-slate-500 pl-4">from 254 rates</span>
+            </div>
+            <div class="flex gap-2">
+               <span class="semi-lg:text-lg font-bold">46</span>
+               <img src="{% static 'image/icons/like.png' %}" class="w-6 h-6">
+            </div>
+         </div>
+         <div class="mt-7">
+            <div class="py-6">
+               <div class="flex items-center gap-5">
+                  <h2 class="text-green-500">
+                     <span class="text-sm 2xl:text-base">$</span>
+                     <span class="text-2xl 2xl:text-3xl">{{ book.price }}</span>
+                  </h2>
+                  <span class="bg-green-500 px-4 py-2 text-sm 2xlL:text-base">Discount 5%</span>
+               </div>
+               <div class="flex gap-2 mt-5">
+                  <button class="flex items-center gap-3 border border-green-500 rounded-md text-green-600 px-5 py-2 text-sm semi-lg:text-base transition-all duration-300 hover:bg-green-500 hover:text-white filter-parent">
+                     <img src="{% static 'image/icons/arrow_right.png' %}" class="w-4 h-4 filter-to-green hover-filter-green-to-white transition-all duration-300">
+                     <span>Buy Now</span>
+                  </button>
+                  <button class="flex items-center gap-3 border border-green-500 rounded-md text-green-600 px-5 py-2 text-sm semi-lg:text-base transition-all duration-300 hover:bg-green-500 hover:text-white filter-parent">
+                     <img src="{% static 'image/icons/cart.png' %}" class="w-4 h-4 filter-to-green hover-filter-green-to-white transition-all duration-300">
+                     <span>Add To Cart</span>
+                  </button>
+               </div>
+            </div>
+            <div class="mt-5">
+               <h2 class="text-lg 2xl:text-[22px] font-semibold mb-2">Description</h2>
+               <p class="text-[15px] semi-lg:text-base 2xl:text-lg">{{ book.desc }}</p>
+            </div>
+            <div class="mt-5">
+               <h2 class="text-lg 2xl:text-[22px] font-semibold mb-2">Book Detail</h2>
+               <table class="ml-5 text-sm md:text-base 2xl:text-lg">
+                  <tr>
+                     <td class="font-semibold">Book Category</td>
+                     <td class="w-10 text-center pr-2">:</td>
+                     <td>{{ book.category.name }}</td>
+                  </tr>
+                  {% for detail in details %}
+                  <tr>
+                     <td class="font-semibold">{{ detail.title }}</td>
+                     <td class="w-5 text-center pr-4">:</td>
+                     <td>{{ detail.value }}</td>
+                  </tr>
+                  {% endfor %}
+               </table>
+            </div>
+            <div class="mt-5">
+               <h2 class="text-lg 2xl:text-[22px] font-semibold mb-2">Synopsis</h2>
+               <p class="text-[15px] semi-lg:text-base 2xl:text-lg">People think when you want to change your life, you need to think big. But world-renowned habits expert James
+                  Clear has discovered another way. He knows that real change comes from the compound effect of hundreds of small
+                  decisions - doing two push-ups a day, waking up give minutes earlier, or reading just one more page. He calls them
+                  atomic habits. In this ground-breaking book, Clear reveals exactly how these minuscule changes can grow into such
+                  life-altering outcomes. He uncovers a handful of simple life hacks (the forgotten art of Habit Stacking, the
+                  unexpected power of the Two Minute Rule, or the trick to entering Goldilocks Zone), and delves into cutting-edge
+                  psychology and neuroscience to explain why they matter. Along the way, he tells inspiring stories of Olympic gold
+                  medalists, leading CEOs and distinguished scientists who have used the science of tiny habits to stay productive,
+                  motivated, and happy.</p>
+            </div>
+         </div>
+      </div>
+   </div>
+</main>
+
+<section class="w-11/12 md:w-5/6 mx-auto md:mt-10">
+   <h1 class="text-2xl sm:text-3xl semi-lg:text-4xl 2xl:text-[42px] font-bold mb-7">Other Recommended Books</h1>
+   {% include 'library/product_div.html' %}
+</section>
+{% endblock %}

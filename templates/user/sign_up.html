@@ -1,0 +1,59 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Create Your VLibrary Account{% endblock %}
+
+{% block content %}
+<div class="flex">
+   <main class="flex justify-center items-center w-full max-h-screen min-h-screen overflow-auto">
+      <form
+         class="w-11/12 max-w-[500px] md:w-5/6 xl:w-3/4 bg-white rounded-md px-10 md:px-0 py-10 md:py-0 my-10 md:my-16"
+         method="post">
+         {% csrf_token %}
+         <h1 class="text-2xl md:text-[28px] font-bold pb-5">CREATE AN ACCOUNT</h1>
+         <div class="w-full h-[6px] bg-red-500 rounded-full shadow-shining-red-small mt-1 mb-10"></div>
+         <div class="mb-4">
+            <div class="flex gap-[4%]">
+               <div class="w-[48%]">
+                  <label for="id_first_name" class="text-sm md:text-base font-semibold block">First name:</label>
+                  {{ form.first_name }}
+               </div>
+               <div class="w-[48%]">
+                  <label for="id_last_name" class="text-sm md:text-base font-semibold block">Last name:</label>
+                  {{ form.last_name }}
+               </div>
+            </div>
+            <small class="text-red-500">{{ form.first_name.errors }}</small>
+         </div>
+         <div class="mb-4">
+            <label for="id_username" class="text-sm md:text-base font-semibold block">Username:</label>
+            {{ form.username }}
+            <small class="text-red-500">{{ form.username.errors }}</small>
+         </div>
+         <div class="mb-4">
+            <label for="id_email" class="text-sm md:text-base font-semibold block">Email address:</label>
+            {{ form.email }}
+            <small class="text-red-500">{{ form.email.errors }}</small>
+         </div>
+         <div class="mb-4">
+            <label for="id_password1" class="text-sm md:text-base font-semibold block">Password:</label>
+            {{ form.password1 }}
+            <small class="text-red-500">{{ form.password1.errors }}</small>
+         </div>
+         <div class="mb-7">
+            <label for="id_password2" class="text-sm md:text-base font-semibold block">Confirm Password:</label>
+            {{ form.password2 }}
+            <small class="text-red-500">{{ form.password2.errors }}</small>
+         </div>
+         <button
+            class="bg-red-500 rounded-sm px-5 py-2 text-white text-[13px] md:text-sm hover:bg-red-700 transition-all">Create
+            Account!</button>
+            <p class="mt-4 text-slate-700">Already have an account? <a href="{% url 'User:sign_in' %}" class="text-red-600 hover:underline">Sign In</a></p>
+      </form>
+   </main>
+   <div class="fixed md:static w-full md:w-[45%] lg:w-[55%] 2xl:w-3/5 -z-10 flex-shrink-0">
+      <img src="{% static 'image/sign_up_img.jpeg' %}" alt="Library Image"
+         class="w-full min-h-screen object-cover object-[70%_30%] lg:object-right brightness-50">
+   </div>
+</div>
+{% endblock %}

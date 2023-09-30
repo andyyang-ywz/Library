@@ -1,0 +1,118 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Add Your New Product{% endblock %}
+
+{% block content %}
+<main class="w-11/12 semi-lg:w-5/6 2xl:w-3/4 mx-auto py-28 md:py-32">
+   <h1 class="text-3xl font-bold">Add Your New Product Here</h1>
+   <form method="post" class="mt-7">
+      {% csrf_token %}
+      <div class="md:flex gap-[2%] semi-lg:gap-[4%]">
+         <div class="max-w-[450px] md:max-w-none md:w-[49%] semi-lg:w-[48%]">
+            <div class="mb-4">
+               <label for="id_name" class="block font-semibold mb-1">Name:</label>
+               {{ form.name }}
+               <small class="block mt-1 text-red-600">{{ form.name.errors }}</small>
+            </div>
+            <div class="mb-4">
+               <label for="id_author" class="block font-semibold mb-1">Author:</label>
+               {{ form.author }}
+               <small class="block mt-1 text-red-600">{{ form.author.errors }}</small>
+            </div>
+            <div class="mb-4" id="category_input_wrapper">
+               <label for="id_category" class="block font-semibold mb-1">Category:</label>
+               {{ form.category }}
+               <div class="relative">
+                  <p class="block w-full border border-slate-500 px-3 py-2 text-sm cursor-pointer">- Click To Select -</p>
+                  <div class="hidden absolute top-full -translate-y-4 w-full max-h-[350px] bg-white border border-slate-400 overflow-auto opacity-0 transition-all duration-300" id="category_select">
+                     {% for category in fictional_categories %}
+                     <option data-category-id="{{ category.id }}" class="block w-full p-3 text-sm cursor-pointer hover:bg-slate-200">{{ category.name }}</option>
+                     {% endfor %}
+                     {% for category in nonfictional_categories %}
+                     <option data-category-id="{{ category.id }}" class="block w-full p-3 text-sm cursor-pointer hover:bg-slate-200">{{ category.name }}</option>
+                     {% endfor %}
+                  </div>
+               </div>
+               <small class="block mt-1 text-red-600">{{ form.category.errors }}</small>
+            </div>
+            <div class="mb-4">
+               <label for="id_desc" class="block font-semibold mb-1">Desc:</label>
+               {{ form.desc }}
+               <small class="block mt-1 text-red-600">{{ form.desc.errors }}</small>
+            </div>
+            <div class="mb-4">
+               <label for="id_publisher" class="block font-semibold mb-1">Publisher:</label>
+               {{ form.publisher }}
+               <small class="block mt-1 text-red-600">{{ form.publisher.errors }}</small>
+            </div>
+            <div class="flex gap-[2%] mb-4">
+               <div class="w-[49%]">
+                  <label for="id_publish_year" class="block font-semibold mb-1">Publish Year:</label>
+                  {{ form.publish_year }}
+                  <small class="block mt-1 text-red-600">{{ form.publish_year.errors }}</small>
+               </div>
+               <div class="w-[49%]">
+                  <label for="id_stock" class="block font-semibold mb-1">Stock:</label>
+                  {{ form.stock }}
+                  <small class="block mt-1 text-red-600">{{ form.stock.errors }}</small>
+               </div>
+            </div>
+         </div>
+         <div class="max-w-[450px] md:max-w-none md:w-[49%] semi-lg:w-[48%]">
+            <div class="mb-4">
+               <label for="id_synopsis" class="block font-semibold mb-1">Synopsis:</label>
+               {{ form.synopsis }}
+               <small class="block mt-1 text-red-600">{{ form.synopsis.errors }}</small>
+            </div>
+            <div class="flex gap-[2%] mb-4">
+               <div class="w-[49%]">
+                  <label for="id_total_pages" class="block font-semibold mb-1">Total pages:</label>
+                  {{ form.total_pages }}
+                  <small class="block mt-1 text-red-600">{{ form.total_pages.errors }}</small>
+               </div>
+               <div class="w-[49%]">
+                  <label for="id_total_chapters" class="block font-semibold mb-1">Total chapters:</label>
+                  {{ form.total_chapters }}
+                  <small class="block mt-1 text-red-600">{{ form.total_chapters.errors }}</small>
+               </div>
+            </div>
+            <div class="mb-4">
+               <label for="id_size" class="block font-semibold mb-1">Size:</label>
+               {{ form.size }}
+               <div class="flex items-center gap-[2%] w-full">
+                  <input type="text" id="height" class="coma-regexed block w-full border border-slate-500 px-3 py-2 text-sm outline-none size-input" placeholder="height" min="0">
+                  <span class="font-bold">x</span>
+                  <input type="text" id="width" class="coma-regexed block w-full border border-slate-500 px-3 py-2 text-sm outline-none size-input" placeholder="width" min="0">
+                  <span class="font-bold">x</span>
+                  <input type="text" id="thickness" class="coma-regexed block w-full border border-slate-500 px-3 py-2 text-sm outline-none size-input" placeholder="thickness" min="0">
+               </div>
+               <small class="block mt-1 text-red-600">{{ form.size.errors }}</small>
+            </div>
+            <div class="mb-4">
+               <label for="id_serial_number" class="block font-semibold mb-1">Serial number:</label>
+               {{ form.serial_number }}
+               <small class="block mt-1 text-red-600">{{ form.serial_number.errors }}</small>
+            </div>
+            <div class="flex gap-[2%] mb-4"> 
+               <div class="w-[49%]">
+                  <label for="id_weight" class="block font-semibold mb-1">Weight:</label>
+                  {{ form.weight }}
+                  <small class="block mt-1 text-red-600">{{ form.weight.errors }}</small>
+               </div>
+               <div class="w-[49%]">
+                  <label for="id_price" class="block font-semibold mb-1">Price:</label>
+                  {{ form.price }}
+                  <small class="block mt-1 text-red-600">{{ form.price.errors }}</small>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="flex justify-end">
+         <button class="border border-red-500 rounded-sm px-5 py-2 text-sm text-red-500 transition-all hover:text-white hover:bg-red-500">Add Product</button>
+      </div>
+   </form>
+</main>
+
+<script src="{% static 'js/seller.js' %}"></script>
+{% endblock %}
