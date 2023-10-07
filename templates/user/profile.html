@@ -7,7 +7,9 @@
 
 <main class="pt-28 md:pt-32 w-11/12 md:w-5/6 mx-auto">
    <div class="sm:flex gap-8">
-      <div class="w-44 h-44 rounded-full bg-gray-300"></div>
+      <div class="border-2 border-neutral-800 rounded-full">
+         <img src="{{ user.userdetail.image.url }}" class="w-44 h-44 rounded-full object-cover shadow-2xl" alt="{{ user.username }} Profile Picture">
+      </div>
       <div class="mt-7 sm:mt-2 px-3 sm:px-0">
          <h1 class="text-3xl md:text-[33px] lg:text-4xl font-bold mb-3">{{ user.get_full_name }}</h1>
          <p class="text-[15px] md:text-base mb-1 italic"><span class="text-gray-700 font-semibold">Username:</span> {{ user.username }}</p>

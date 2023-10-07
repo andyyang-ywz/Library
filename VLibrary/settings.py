@@ -42,6 +42,7 @@ INSTALLED_APPS = [
    'User.apps.UserConfig',
    'navigation.apps.NavigationConfig',
    'Library.apps.LibraryConfig',
+   'Seller.apps.SellerConfig',
 ]
 
 MIDDLEWARE = [

@@ -85,3 +85,8 @@
   filter: invert(13%) sepia(40%) saturate(6011%) hue-rotate(348deg)
     brightness(101%) contrast(94%);
 }
+
+.filter-to-gray2 {
+  filter: invert(49%) sepia(0%) saturate(410%) hue-rotate(293deg)
+    brightness(90%) contrast(81%);
+}

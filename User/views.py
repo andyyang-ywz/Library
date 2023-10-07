@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, FormView
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.contrib import messages
 from Library.models import Book
+from Seller.models import Seller
 from .models import UserDetail
 from .forms import UserRegistrationForm, LoginForm, EditUserForm, EditUserDetailForm
+import os
 
 # Create your views here.
 class WelcomePage(TemplateView):
@@ -69,7 +71,7 @@ class SignUpPage(CreateView):
 
    def get_success_url(self):
       messages.success(self.request, "You successfully created your account. You can now login!")
-      return reverse_lazy('User:welcome')
+      return reverse_lazy('User:sign_in')
    
    def get(self, request, *args, **kwargs):
       if request.user.is_authenticated:
@@ -110,16 +112,47 @@ class ProfilePage(TemplateView):
 
 
 
-class AboutAccountPage(TemplateView):
+class AboutAccountPage(FormView):
    template_name = 'user/about_account.html'
 
-   def get_context_data(self, **kwargs):
-      page_context = super().get_context_data()
-      page_context['form'] = EditUserForm(instance=self.request.user)
-      user_detail = UserDetail.objects.get(pk=self.request.user)
-      page_context['form2'] = EditUserDetailForm(instance=user_detail)
-      return page_context
 
+   def get(self, request, *args, **kwargs):
+      return render(request, self.template_name, {
+         'form': EditUserForm(instance=self.request.user),
+         'form2': EditUserDetailForm(instance=self.request.user.userdetail)
+      })
+
+
+   def post(self, request, *args, **kwargs):
+      old_picture = request.user.userdetail.image
+      
+      form = EditUserForm({
+         'username': request.POST['username'],
+         'first_name': request.POST['first_name'],
+         'last_name': request.POST['last_name'],
+         'email': request.POST['email']
+      }, instance=self.request.user)
+
+      form2 = EditUserDetailForm({
+         'gender': request.POST['gender'],
+         'birthday': request.POST['birthday']
+      }, request.FILES, instance=request.user.userdetail)
+
+      if form.is_valid() and form2.is_valid():
+         if 'image' in request.FILES:
+            if old_picture != 'profile_picture/default.jpg':
+               os.remove(old_picture.path)
+         
+         form.save()
+         form2.save()
+
+         messages.success(request, 'Your Account Is Successfully Updated')
+         return redirect('User:about_account')
+
+      return render(request, self.template_name, {
+         'form': form,
+         'form2': form2
+      })
 
    
 

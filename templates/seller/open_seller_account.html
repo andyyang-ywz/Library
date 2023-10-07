@@ -1,0 +1,63 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Open Your New Seller Account. Be a VLibrary Seller Now!{% endblock %}
+
+{% block content %}
+<main class="w-11/12 md:w-5/6 mx-auto pt-24 md:pt-28 pb-20">
+   <h2 class="w-3/4 mx-auto mt-5 mb-8 text-4xl font-bold">Seller Account Creation Form</h2>
+   <form method="post" enctype="multipart/form-data" class="w-3/4 bg-neutral-700 rounded-xl shadow-xl mx-auto p-14 text-white">
+      {% csrf_token %}
+      <div class="flex gap-10">
+         <div class="flex-shrink-0">
+            <label for="id_image" class="flex justify-center items-center w-44 h-44 bg-neutral-500 border-2 border-neutral-200 rounded-full cursor-pointer overflow-hidden">
+               <h2 class="text-xl" id="upload_image_button_h2">Upload image</h2>
+               <img src="" class="hidden w-44 h-44 rounded-full object-cover" id="uploaded_image">
+            </label>
+            {{ form.image }}
+         </div>
+         <div class="w-full">
+            {{ form.store_name }}
+            <div>
+               <p class="my-2">Location : {{ form.location }}</p>
+               <p>Joined At : Soon</p>
+            </div>
+         </div>
+      </div>
+      <div class="pt-2">
+         <small class="block my-2 text-red-400">{{ form.image.errors }}</small>
+         <small class="block my-2 text-red-400">{{ form.store_name.errors }}</small>
+         <small class="block my-2 text-red-400">{{ form.location.errors }}</small>
+      </div>
+      <div class="mt-7">
+         <label for="" class="text-lg font-semibold">Seller Description :</label>
+         {{ form.desc }}
+         <small class="block my-2 text-red-400">{{ form.desc.errors }}</small>
+      </div>
+      <div class="flex justify-end mt-5 text-black">
+         <button class="bg-white rounded-sm px-7 py-2 text-sm transition-all hover:bg-neutral-200">Be A Seller! </button>
+      </div>
+   </form>
+</main>
+
+<script>
+   $(document).ready(function()
+   {
+      $('input[id=id_image]').change(function()
+      {
+         const file = this.files[0]
+         if(file)
+         {
+            const reader = new FileReader()
+            reader.onload = function(event)
+            {  
+               $('#uploaded_image').removeClass('hidden')
+               $('#uploaded_image').attr('src', event.target.result)
+               $('#upload_image_button_h2').addClass('hidden')
+            }
+            reader.readAsDataURL(file)
+         }
+      })
+   })
+</script>
+{% endblock %}

@@ -8,6 +8,7 @@
    <h1 class="text-3xl font-bold">Add Your New Product Here</h1>
    <form method="post" class="mt-7">
       {% csrf_token %}
+      <input type="hidden" name="seller" value="{{ user.id }}">
       <div class="md:flex gap-[2%] semi-lg:gap-[4%]">
          <div class="max-w-[450px] md:max-w-none md:w-[49%] semi-lg:w-[48%]">
             <div class="mb-4">

@@ -4,6 +4,7 @@ $(document).ready(function()
    let divIntro2 = $('#introduction div:nth-child(2)')
    let divIntro3 = $('#introduction div:nth-child(3)')
 
+   // show elmeent on scroll
    $(window).scroll(function() {
       if( $(this).scrollTop() > 350 ) 
       { 
@@ -63,6 +64,8 @@ $(document).ready(function()
       }
    })
 
+
+   // navigation for quote slide on welcome page
    let quote_slide
    function move_quote_slide(quote_slide)
    {
@@ -94,14 +97,35 @@ $(document).ready(function()
    
    
 
+   // toggle gender input
    let genderP      = $('#gender_input_wrapper > div > p')
    let genderSelect = $('#gender_select')
    let genderOption = $('#gender_select option')
    let genderInput  = $('input[name=gender]')
    toggleSelectInput(genderP, genderSelect, genderOption, genderInput, 'gender-type')
-
+   // change birthday input
+   $('input[type=date]').val( $('input[name=birthday]').val() )
    $('input[type=date]').change(function()
    {
       $('input[name=birthday]').val( $(this).val() )
+   })
+
+
+
+   // preview image on account page
+   $('input[name=image]').change(function()
+   {
+      // taking the files variables
+      const file = this.files[0]
+      if(file)
+      {
+         // initialize FileReader
+         let reader = new FileReader()
+         reader.onload = function(event)
+         {
+            $('#profile_picture_preview').attr('src', event.target.result)
+         }
+         reader.readAsDataURL(file)
+      }
    })
 })

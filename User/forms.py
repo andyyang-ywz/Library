@@ -70,7 +70,7 @@ class EditUserForm(forms.ModelForm):
 class EditUserDetailForm(forms.ModelForm):
    class Meta:
       model = UserDetail
-      fields = "__all__"
+      exclude = ['user']
       widgets = {
          'gender': forms.HiddenInput(attrs={
             'class': 'block w-full border border-slate-500 rounded-sm mt-1 p-2 text-sm outline-none'

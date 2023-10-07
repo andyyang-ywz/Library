@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from django.views.generic import CreateView
-from .forms import NewProductForm
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.views.generic import CreateView, TemplateView
+from .forms import NewProductForm, NewSellerForm
+from .models import Seller
 
 # Create your views here.
 class AddProductPage(CreateView):
@@ -9,5 +11,51 @@ class AddProductPage(CreateView):
 
    def get_context_data(self, **kwargs):
       page_context = super().get_context_data()
-      print(page_context)
       return page_context
+
+   def post(self, request, *args, **kwargs):
+      form = NewProductForm(request.POST)
+      if form.is_valid():
+         form.save()
+
+         seller_account = Seller.objects.get(user_id=request.user.id)
+         if not seller_account.account_active:
+            seller_account.account_active = True
+            seller_account.save()
+
+         messages.success(request, 'Your new product has been successfully uploaded into the database.')
+
+         return redirect('Seller:upload_image')
+      return super().post(self, request)
+
+
+class OpenSellerAccount(CreateView):
+   template_name = 'seller/open_seller_account.html'
+   model = Seller
+   form_class = NewSellerForm
+
+   def post(self, request, *args, **kwargs):
+      form = NewSellerForm(request.POST, request.FILES)
+      if form.is_valid():
+         store_name = form.cleaned_data['store_name']
+         image      = form.cleaned_data['image']
+         desc       = form.cleaned_data['desc']
+         location   = form.cleaned_data['location']
+
+         new_seller_account = Seller(
+            store_name = store_name,
+            image      = image,
+            desc       = desc,
+            location   = location,
+            user       = request.user,
+         )
+         new_seller_account.save()
+
+         messages.success(request, 'You have made your seller account. But before we publicize you account, please upload your first product.')
+
+         return redirect('Seller:add_product')
+      return super().post(self, request)
+
+
+class ProductImageUpload(TemplateView):
+   template_name = 'seller/product_image_form.html'

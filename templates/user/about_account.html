@@ -6,29 +6,41 @@
 {% block content %}
 <main class="w-11/12 md:w-5/6 mx-auto pt-24 md:pt-28 pb-20">
    <h1 class="font-bold text-[32px] md:text-4xl mb-12">Edit Your Account</h1>
-   <form method="post">
+   <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <section class="flex gap-10 flex-col md:flex-row semi-lg:gap-16 w-full">
          <div class="flex-shrink-0 pb-10 md:pb-0 lg:px-10">
-            <img src="{{ user.userdetail.image.url }}" class="w-48 h-48 border-2 border-neutral-800 rounded-full mx-auto md:mx-0">
+            <div class="sticky top-28 w-48 h-48 group">
+               <img src="{{ user.userdetail.image.url }}" id="profile_picture_preview" class="w-48 h-48 object-cover border-2 border-neutral-800 rounded-full mx-auto md:mx-0 shadow-2xl">
+               <div class="absolute inset-0 bg-neutral-800 rounded-full opacity-0 transition-all group-hover:opacity-60"></div>
+               <label for="id_image" class="absolute flex items-center justify-center inset-0 text-white opacity-0 select-none transition-all group-hover:opacity-100 cursor-pointer">
+                  <p class="absolute font-semibold text-xl text-center">Change Picture</p>
+               </label>
+               {{ form2.image }}
+            </div>
+            <small class="block text-red-600 mt-1">{{ form2.image.errors }}</small>
          </div>
          <div class="w-full h-2 md:h-auto md:min-h-full md:w-2 bg-red-500 rounded-full shadow-shining-red flex-shrink-0"></div>
          <div class="w-full max-w-[600px] mx-auto md:mx-0">
             <div class="mb-7">
                <label for="id_username" class="font-semibold">Username: </label>
                {{ form.username }}
+               <small class="block text-red-600 mt-1">{{ form.username.errors }}</small>
             </div>
             <div class="mb-7">
                <label for="id_first_name" class="font-semibold">First Name: </label>
                {{ form.first_name }}
+               <small class="block text-red-600 mt-1">{{ form.first_name.errors }}</small>
             </div>
             <div class="mb-7">
                <label for="id_last_name" class="font-semibold">Last Name: </label>
                {{ form.last_name }}
+               <small class="block text-red-600 mt-1">{{ form.last_name.errors }}</small>
             </div>
             <div class="mb-7">
                <label for="id_email" class="font-semibold">Email: </label>
                {{ form.email }}
+               <small class="block text-red-600 mt-1">{{ form.email.errors }}</small>
             </div>
             <div class="mb-7" id="gender_input_wrapper">
                <label for="id_gender" class="font-semibold">Gender: </label>
@@ -43,14 +55,16 @@
                   </p>
                   <div class="hidden absolute top-full -translate-y-4 w-full bg-white border border-slate-400 overflow-auto opacity-0 transition-all duration-300" id="gender_select">
                      <option data-gender-type="Male" class="block w-full p-3 text-sm cursor-pointer hover:bg-slate-200">Male</option>
-                     <option data-gender-type="female" class="block w-full p-3 text-sm cursor-pointer hover:bg-slate-200">Female</option>
+                     <option data-gender-type="Female" class="block w-full p-3 text-sm cursor-pointer hover:bg-slate-200">Female</option>
                   </div>
                </div>
+               <small class="block text-red-600 mt-1">{{ form2.gender.errors }}</small>
             </div>
             <div class="mb-7">
                <label for="id_birthday" class="font-semibold">Birthday: </label>
                {{ form2.birthday }}
                <input type="date" class="block w-full border border-slate-500 rounded-sm mt-1 p-2 text-sm outline-none">
+               <small class="block text-red-600 mt-1">{{ form2.birthday.errors }}</small>
             </div>
             <div class="flex justify-end mb-5">
                <button class="border border-red-600 rounded-sm py-2 px-4 text-sm text-red-600 transition-all hover:text-white hover:bg-red-500">Update Account!</button>
@@ -63,7 +77,7 @@
       <h1 class="font-bold text-[32px] md:text-4xl">About Account</h1>
       <div class="mt-10">
          <p class="font-semibold mb-5">Your account is a user-statused account. Your role is a user for this webiste and as a buyer for book sellers. But you can be a seller by making a channel for yourself. If your role is a seller-statused account, you will still be able to buy books from other store, but you won't be able to give likes and give ratings. And surely, your role as a seller is to have product, so you must have at least 1 product before your channel gets publicized. Click this button below to get your seller status and upload your first product.</p>
-         <a href="" class="border border-green-700 rounded-sm py-2 px-6 text-[13px] md:text-sm text-green-700 transition-all hover:text-white hover:bg-green-700">Create Seller Account</a>
+         <a href="{% url 'Seller:open_seller_account' %}" class="border border-green-700 rounded-sm py-2 px-6 text-[13px] md:text-sm text-green-700 transition-all hover:text-white hover:bg-green-700">Create Seller Account</a>
       </div>
       <div class="mt-10">
          <p class="font-semibold mb-5">As a user, we would like to know your feedbacks to help us grow our website. If you have any problem with our website, feel free to click this button below to report your problems. Just a feedback will also help.</p>

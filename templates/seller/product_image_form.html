@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Upload Your Image For Your New Product{% endblock %}
+
+{% block content %}
+<main class="w-11/12 md:w-5/6 mx-auto pt-24 md:pt-28 pb-20">
+   <h1 class="mt-5 text-4xl font-bold">Upload Your Pictures for Your New Product</h1>
+   <div class="flex items-start gap-10 mt-10">
+      <div class="flex justify-center items-center w-[400px] aspect-[3_/_4] bg-neutral-600 rounded-md"></div>
+      <div class="flex flex-wrap items-start gap-4">
+         <div class="flex items-center justify-center w-[150px] aspect-[3_/_4] bg-neutral-700 rounded-md">
+            <img src="{% static 'image/icons/plus.png' %}" class="w-12 h-12 filter-to-gray2">
+         </div>
+      </div>
+   </div>
+</main>
+{% endblock %}
