@@ -70,15 +70,18 @@
   filter: invert(47%) sepia(47%) saturate(6405%) hue-rotate(123deg)
     brightness(98%) contrast(83%);
 }
-
-.filter-parent:hover .hover-filter-green-to-white {
-  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(260deg)
-    brightness(110%) contrast(101%);
+.filter-to-green2 {
+  filter: invert(60%) sepia(48%) saturate(718%) hue-rotate(89deg)
+    brightness(94%) contrast(88%);
 }
 
 .filter-to-gray {
   filter: invert(12%) sepia(9%) saturate(2737%) hue-rotate(176deg)
     brightness(90%) contrast(87%);
+}
+.filter-to-gray2 {
+  filter: invert(49%) sepia(0%) saturate(410%) hue-rotate(293deg)
+    brightness(90%) contrast(81%);
 }
 
 .filter-to-red {
@@ -86,7 +89,65 @@
     brightness(101%) contrast(94%);
 }
 
-.filter-to-gray2 {
-  filter: invert(49%) sepia(0%) saturate(410%) hue-rotate(293deg)
-    brightness(90%) contrast(81%);
+.filter-parent:hover .hover-filter-green-to-white {
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(260deg)
+    brightness(110%) contrast(101%);
+}
+
+.filter-parent:hover .hover-black-to-white {
+  filter: brightness(0) invert(1);
+}
+
+#code_typer div {
+  width: 80px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  cursor: pointer;
+  border-color: #737373;
+}
+
+#code_typer div:nth-child(1) {
+  grid-area: num_1;
+}
+#code_typer div:nth-child(2) {
+  grid-area: num_2;
+}
+#code_typer div:nth-child(3) {
+  grid-area: num_3;
+}
+#code_typer div:nth-child(4) {
+  grid-area: num_4;
+}
+#code_typer div:nth-child(5) {
+  grid-area: num_5;
+}
+#code_typer div:nth-child(6) {
+  grid-area: num_6;
+}
+#code_typer div:nth-child(7) {
+  grid-area: num_7;
+}
+#code_typer div:nth-child(8) {
+  grid-area: num_8;
+}
+#code_typer div:nth-child(9) {
+  grid-area: num_9;
+}
+#code_typer div:nth-child(10) {
+  grid-area: num_0;
+}
+#code_typer div:last-of-type {
+  grid-area: backspace;
+  height: 120px;
+}
+#code_typer {
+  display: grid;
+  grid-template-areas:
+    "num_1 num_2 num_3 backspace"
+    "num_4 num_5 num_6 backspace"
+    "num_7 num_8 num_9 num_0";
 }

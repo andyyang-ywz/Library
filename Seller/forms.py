@@ -1,5 +1,5 @@
 from django import forms
-from Library.models import Book
+from Library.models import Book, BookPicture
 from Seller.models import Seller
 
 class NewProductForm(forms.ModelForm):
@@ -29,13 +29,14 @@ class NewSellerForm(forms.ModelForm):
       fields = ['store_name', 'image', 'desc', 'location']
       widgets = {
          'store_name': forms.TextInput(attrs={
-            'class': 'w-full bg-transparent border-b border-slate-200 my-5 text-2xl placeholder:text-neutral-300 outline-none',
-            'placeholder': 'Input Your Name'
+            'class': 'w-full bg-transparent border-b border-slate-200 my-5 p-2 text-xl md:text-2xl placeholder:text-neutral-300 outline-none',
+            'placeholder': 'Input Your Name',
+            'autocomplete': 'off'
          }),
-         'desc': forms.Textarea(attrs={'class': 'w-full bg-neutral-600 mt-2 p-3 resize-none outline-none'}),
+         'desc': forms.Textarea(attrs={'class': 'w-full bg-neutral-600 mt-2 p-3 text-[15px] md:text-base resize-none outline-none'}),
          'image': forms.FileInput(attrs={'class': 'hidden'}),
          'location': forms.TextInput(attrs={
-            'class': 'w-3/5 rounded-sm px-2 py-[6px] text-sm text-black outline-none',
+            'class': 'w-4/5 semi-lg:w-[290px] bg-neutral-200 rounded-sm px-2 py-[6px] text-[13px] md:text-sm text-black outline-none',
             'placeholder': 'your location'
          })
       }

@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView, DetailView
-from .models import Book
+from django.shortcuts import render, redirect
+from django.views.generic import TemplateView, DetailView, CreateView, FormView, View
+from django.contrib import messages
+from .models import Book, BookPicture, Transaction
+from .forms import TransactionForm, FeedbackReportForm
 
 
 # Create your views here.
@@ -33,8 +35,8 @@ class BookDetailPage(DetailView):
    def get_context_data(self, **kwargs):
       page_context = super().get_context_data()
       book = page_context['book']
-      page_context['book_img'] = (book.id - 14) * -1
       page_context['books'] = self.get_recommended_book(book)
+      page_context['book_pictures'] = BookPicture.objects.filter(book=book).order_by('-is_main_image')
 
       page_context['details'] = [
          {'title': 'Author'        , 'value': book.author},
@@ -48,3 +50,88 @@ class BookDetailPage(DetailView):
          {'title': 'Serial Number' , 'value': book.serial_number}
       ]
       return page_context
+
+
+
+class PurchasePage(FormView):
+   template_name = 'library/purchase.html'
+   form = TransactionForm
+
+   def get(self, request, *args, **kwargs):
+      return render(request, self.template_name, {
+         'form': TransactionForm(initial={'shipment_method': 'Normal Shipment'}),
+         'book': Book.objects.get(id=kwargs['book_id'])
+      })
+   
+   def post(self, request, *args, **kwargs):
+      validated_data = {
+         'address'        : request.POST['address'],
+         'shipment_method': request.POST['shipment_method'],
+         'payment_method' : request.POST['payment_method']
+      }
+      form = TransactionForm(validated_data)
+      if form.is_valid():
+         messages.success(request, 'Order Fulfilled, please enter your payment code.')
+         return redirect(
+            'Library:payment_process',
+            address         = form.cleaned_data['address'],
+            shipment_method = form.cleaned_data['shipment_method'],
+            payment_method  = form.cleaned_data['payment_method'],
+            book_id         = request.POST['book_id']
+         )
+      
+      return render(request, self.template_name, {
+         'form': form,
+         'book': Book.objects.get(id=kwargs['book_id'])
+      })
+
+
+
+class PaymentProcessPage(FormView):
+   template_name = 'library/payment.html'
+
+   def get(self, request, *args, **kwargs):
+      page_context = kwargs
+      page_context['payment_logo_img'] = kwargs['payment_method'].lower() + '.png'
+      
+      return render(request, self.template_name, page_context)
+
+   def post(self, request, *args, **kwargs):
+      available_payment_method = ['BCA', 'Paypal', 'Ovo']
+      avaialbel_shipment_method = ['Normal Shipment', 'Fast Shipment', 'Slow Shipment']
+      if kwargs['payment_method'] in available_payment_method and kwargs['shipment_method'] in avaialbel_shipment_method:
+         book = Book.objects.get(pk=kwargs['book_id'])
+
+         new_transaction = Transaction(
+            address         = kwargs['address'],
+            shipment_method = kwargs['shipment_method'],
+            payment_method  = kwargs['payment_method'],
+            user            = request.user,
+            seller          = book.seller,
+            book            = book,
+         )
+         new_transaction.save()
+         
+         messages.success(request, 'The book has been purchased. Your book will arive soon!!!')
+         return redirect('Library:main')
+      
+      messages.error(request, 'Something went wrong! Please try again..')
+      return self.get(request, *args, **kwargs)
+
+
+class FeedbackReportPage(CreateView):
+   template_name = 'library/contact.html'
+   form_class = FeedbackReportForm
+
+   def post(self, request, *args, **kwargs):
+      form = FeedbackReportForm(request.POST)
+      if form.is_valid():
+         form.save()
+         messages.success(request, "Thanks for your feedback/report. Thanks for supporting us!!!")
+         return redirect("Library:feedback_report")
+         
+      return render(request, self.template_name, {
+         'form': form
+      })
+
+

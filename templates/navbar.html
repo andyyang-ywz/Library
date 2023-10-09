@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_tags %}
 <nav class="fixed flex items-center w-full top-0 bg-white border-b border-slate-400 z-[90]">
    <div class="flex gap-12 semi-lg:gap-28 xl:gap-40 justify-between w-[94%] sm:w-[87%] lg:w-5/6 h-16 md:h-20 mx-auto">
       <header class="flex gap-1 items-center">
@@ -87,18 +88,29 @@
             <section class="mb-5">
                <h2 class="flex items-center gap-2 mt-3 mb-5 text-red-800">
                   <img src="{% static 'image/icons/history.png' %}" class="w-5 h-5 filter-to-red transition-all duration-300">
-                  <span class="font-bold text-xl">Your Cart</span>
+                  <span class="font-bold text-xl">Your History</span>
                </h2>
+               {% for transaction in transaction_history %}
                <div class="shadow-book-div rounded-md overflow-hidden">
                   <div class="flex gap-2">
                      <div class="w-[90px] h-[120px]">
-                        <img src="{% static 'image/books/9.jpg' %}" alt="Image Of 'Name' Book" class="object-cover rounded-sm">
+                        {% with transaction.book|find_main_image as book_main_image %}
+                        <img src="{{ book_main_image.image.url }}" alt="Image Of '{{ transaction.book.name }}' Book" class="object-cover rounded-sm">
+                        {% endwith %}
                      </div>
                      <div class="p-2">
-                        <h2>The 48 Laws of Power - Robert Green</h2>
-                        <p class="my-[2px] text-sm italic"><span class="font-bold">Address</span>: Jln. Durian No.116C</p>
-                        <p class="my-[2px] text-sm italic"><span class="font-bold">Arrival Date</span>: 27 August 2023</p>
-                        <p class="my-[2px] text-sm italic text-green-600"><span class="text-xs">$</span><span class="pl-1 font-bold">16.59</span></p>
+                        <h2 class="transition-ll hover:text-red-700"><a href="{% url 'Library:book_detail' 4 %}">{{ transaction.book.name }}</a></h2>
+                        <div class="flex gap-8">
+                           <div>
+                              <p class="my-[2px] text-sm italic"><span class="font-bold">Address</span>: {{ transaction.address }}</p>
+                              <p class="my-[2px] text-sm italic"><span class="font-bold">Arrival Date</span>: {{ transaction.arrive_date|date:'j F Y' }}</p>
+                           </div>
+                           <div>
+                              <p class="my-[2px] text-sm italic"><span class="font-bold">Shipment</span>: {{ transaction.shipment_method }}</p>
+                              <p class="my-[2px] text-sm italic"><span class="font-bold">Payment</span>: {{ transaction.payment_method }}</p>
+                           </div>
+                        </div>
+                        <p class="my-[2px] text-sm italic text-green-600"><span class="text-xs">$</span><span class="pl-1 font-bold">{{ transaction.book.price }}</span></p>
                      </div>
                   </div>
                   <div class="flex justify-between px-6 py-4">
@@ -122,6 +134,7 @@
                      </div>
                   </div>
                </div>
+               {% endfor %}
             </section>
          </div>
 
@@ -138,7 +151,7 @@
                         <img src="{% static 'image/books/9.jpg' %}" alt="Image Of 'Name' Book" class="object-cover rounded-sm">
                      </div>
                      <div class="p-2">
-                        <h2>The 48 Laws of Power - Robert Green</h2>
+                        <h2 class="transition-ll hover:text-red-700"><a href="{% url 'Library:book_detail' 4 %}">The 48 Laws of Power - Robert Green</a></h2>
                         <p class="my-[2px] text-sm italic"><span class="font-bold">Address</span>: Jln. Durian No.116C</p>
                         <p class="my-[2px] text-sm italic"><span class="font-bold">Category</span>: Self-Help</p>
                         <p class="my-[2px] text-sm italic text-green-600"><span class="text-xs">$</span><span class="pl-1 font-bold">16.59</span></p>

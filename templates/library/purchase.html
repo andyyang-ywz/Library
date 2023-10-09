@@ -1,0 +1,115 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}Purchase {{ book.name }}{% endblock %}
+
+{% block content %}
+<form method="post">
+   {% csrf_token %}
+   <input type="hidden" value="{{ book.id }}" name="book_id">
+   <main class="w-11/12 semi-lg:w-5/6 2xl:w-3/4 mx-auto py-28 md:py-32">
+      <h1 class="text-2xl md:text-3xl font-semibold">Purchase: <span class="font-bold">{{ book.name }}</span></h1>
+      <div class="xl:flex items-start gap-10 w-full">
+         <!-- generic info about the book -->
+         <section class="flex items-start gap-5 w-full mt-5">
+            <div class="w-[200px] md:w-[230px] 2xl:w-[280px] aspect-[3_/_4] rounded-md overflow-hidden flex-shrink-0">
+               {% with book|find_main_image as book_main_image %}
+               <img src="{{ book_main_image.image.url }}" alt="Book Image: {{ book.name }}" class="w-full h-full object-cover">
+               {% endwith %}
+            </div>
+            <div class="font-semibold text-sm md:text-base">
+               <h2 class="my-3 text-lg md:text-xl font-bold">Book Category: {{ book.category.name }}</h2>
+               <p class="md:text-lg">Author: {{ book.author }}</p>
+               <p>Publisher: {{ book.publisher }}</p>
+               <p>Year Published: {{ book.publish_year }}</p>
+               <p>Total Pages: {{ book.total_pages }}</p>
+               <p>Total Chapters: {{ book.total_pages }}</p>
+      
+               <p class="text-lg mt-3">Price: </p>
+               <h2 class="text-green-500">$ <span class="text-2xl font-bold">{{ book.price }}</span></h2>
+               
+               <h2 class="font-bold text-base md:text-lg mt-3">Serial Number: </h2>
+               <p class="font-bold text-[22px] md:text-2xl">{{ book.serial_number }}</p>
+            </div>
+         </section>
+         <!-- generic info about the book -->
+         <section class="w-full md:w-[550px] xl:w-[500px] 2xl:w-[650px] flex-shrink-0">
+            <!-- shipment and address input -->
+            <div class="flex items-center gap-5 my-7">
+               <img src="{% static 'image/icons/location.png' %}" class="w-9 md:w-12 h-9 md:h-12 filter-to-red flex-shrink-0">
+               <div class="w-full">
+                  <label for="id_location" class="md:text-lg font-semibold">Address: </label>
+                  {{ form.address }}
+               </div>
+            </div>
+            <div>
+               <div class="flex items-center gap-2 mb-2 text-lg text-semibold">
+                  <img src="{% static 'image/icons/cart.png' %}" class="w-6 h-6">
+                  <h1>Choose your Shipment Method: </h1>
+                  {{ form.shipment_method }}
+               </div>
+               <div class="relative border border-neutral-800 rounded-sm p-5 text-sm md:text-base cursor-pointer select-none" id="shipping_wrapper">
+                  <h2 class="font-semibold" id="shipping_selected">Normal Shipment ($2) (Estimated Time: 26 Oktober - 31 Oktober 2023)</h2>
+                  <div class="hidden absolute top-0 left-0 w-full bg-white border border-neutral-800 z-10" id="shipping_options">
+                     <option value="Fast Shipment" class="block w-full border-b border-neutral-500 p-5 transition-all hover:bg-[#ebebeb] cursor-pointer select-none whitespace-break-spaces">Fast Shipment ($4) (Estimated Time: 20 Oktober - 26 Oktober 2023)</option>
+                     <option value="Normal Shipment" class="block w-full border-b border-neutral-500 p-5 transition-all hover:bg-[#ebebeb] cursor-pointer select-none whitespace-break-spaces">Normal Shipment ($2) (Estimated Time: 26 Oktober - 31 Oktober 2023)</option>
+                     <option value="Slow Shipment" class="block w-full p-5 transition-all hover:bg-[#ebebeb] cursor-pointer select-none whitespace-break-spaces">Slow Shipment ($1) (Estimated Time: 29 Oktober - 4 November 2023)</option>
+                  </div>
+               </div>
+            </div>
+            <!-- shipment and address input -->
+
+            <!-- errors -->
+            <div class="mt-5">
+               <small class="text-base text-red-500 font-semibold">{{ form.address.errors }}</small>
+               <small class="text-base text-red-500 font-semibold">{{ form.shipment_method.errors }}</small>
+               <small class="text-base text-red-500 font-semibold">{{ form.payment_method.errors }}</small>
+            </div>
+            <!-- errors -->
+
+            <!-- submit button -->
+            <div class="flex justify-end mt-10">
+               <button class="flex items-center gap-3 border border-green-500 rounded-md text-green-600 px-5 py-2 text-sm semi-lg:text-base transition-all duration-300 hover:bg-green-500 hover:text-white filter-parent" type="button" id="purchase_button">
+                  <img src="{% static 'image/icons/arrow_right.png' %}"
+                     class="w-4 h-4 filter-to-green hover-filter-green-to-white transition-all duration-300">
+                  <span>Purchase Book</span>
+               </button>
+            </div>
+            <!-- submit button -->
+         </section>
+      </div>
+   </main>
+   
+   <section class="hidden items-center justify-center fixed top-0 left-0 w-full min-h-screen z-[100]" id="payment_method_wrapper">
+      <div id="dark_bg" class="absolute top-0 left-0 w-full min-h-screen bg-neutral-900 opacity-0 transition-all duration-300"></div>
+      <div class="w-[440px] md:w-[480px] bg-white shadow-2xl rounded-md px-10 py-16 z-10 opacity-0 scale-75 transition-all duration-300" id="payment_method_options">
+         {{ form.payment_method }}
+         <div class="flex items-center gap-4 mb-5">
+            <img src="{% static 'image/icons/payment.png' %}" class="w-7 h-7 md:w-9 md:h-9">
+            <h1 class="text-xl md:text-[22px] font-bold">Choose Your Payment Method: </h1>
+         </div>
+         <div data-value="Paypal" class="flex justify-between items-center w-full h-14 md:h-16 border border-neutral-500 rounded-sm p-5 mb-3 hover:bg-[#ebebeb] cursor-pointer transition-all payment_option">
+            <img src="{% static 'image/payment_method/paypal.png' %}" alt="Paypal Logo" class="h-6 md:h-7">
+            <img src="{% static 'image/icons/check_w_circle.png' %}" class="hidden w-6 h-6 filter-to-green2 check_icon">
+         </div>
+         <div data-value="Ovo" class="flex justify-between items-center w-full h-14 md:h-16 border border-neutral-500 rounded-sm p-5 mb-3 hover:bg-[#ebebeb] cursor-pointer transition-all payment_option">
+            <img src="{% static 'image/payment_method/ovo.png' %}" alt="Ovo Logo" class="h-5 md:h-6">
+            <img src="{% static 'image/icons/check_w_circle.png' %}" class="hidden w-6 h-6 filter-to-green2 check_icon">
+         </div>
+         <div data-value="BCA" class="flex justify-between items-center w-full h-14 md:h-16 border border-neutral-500 rounded-sm p-5 mb-3 hover:bg-[#ebebeb] cursor-pointer transition-all payment_option">
+            <img src="{% static 'image/payment_method/bca.png' %}" alt="BCA Logo" class="h-6 md:h-7">
+            <img src="{% static 'image/icons/check_w_circle.png' %}" class="hidden w-6 h-6 filter-to-green2 check_icon">
+         </div>
+         <div class="flex justify-end mt-5">
+            <button class="flex items-center gap-3 border border-neutral-600 rounded-sm px-5 py-2 transition-all hover:text-white hover:bg-neutral-800 filter-parent">
+               <span>Select</span>
+               <img src="{% static 'image/icons/check.png' %}" class="w-4 h-4 hover-black-to-white transition-all">
+            </button>
+         </div>   
+      </div>
+   </section>
+</form>
+
+<script src="{% static 'js/library.js' %}"></script>
+{% endblock %}

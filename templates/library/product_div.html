@@ -1,11 +1,14 @@
 {% load static %}
+{% load custom_tags %}
 <div class="flex gap-[2%] md:gap-[1%] semi-lg:gap-[2%] lg:gap-[1%] xl:gap-[2%] 2xl:gap-[0.5%] flex-wrap">
    {% for book in books %}
    <div
       class="w-[48%] sm:w-[40%] md:w-[32%] lg:w-[24%] xl:w-[23%] 2xl:w-[19.5%] max-w-[240px] lg:max-w-[300px] mb-10 pb-5 shadow-book-div rounded-b-md group">
       <div class="relative w-full aspect-[3_/_4] bg-neutral-300 rounded-t-md overflow-hidden">
-         <img src="{% static 'image/books/' %}{{ forloop.counter }}.jpg" alt="Image Of {{ book.name }}"
-            class="w-full h-full object-cover transition-all group-hover:scale-105">
+         {% with book|find_main_image as book_main_image %}
+         <img src="{{ book_main_image.image.url }}" alt="Image Of {{ book.name }}"
+         class="w-full h-full object-cover transition-all group-hover:scale-105">
+         {% endwith %}
          {% if forloop.counter == 1 %}
          <div class="absolute top-3 left-0 bg-red-400 px-4 py-2 text-neutral-800 font-bold text-sm md:text-base">Best
             Selling</div>
@@ -43,4 +46,3 @@
       </div>
    </div>
    {% endfor %}
-</div>

@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
+{% load custom_tags %}
 
 {% block title %}Your Profile Page{% endblock %}
 
@@ -25,7 +26,7 @@
             <p class="text-sm md:text-[15px] 2xl:text-base text-slate-600 italic">Set your address to ease your picking up.</p>
          </div>
       </a>
-      <a class="flex items-center gap-4 md:gap-5 px-5 md:px-6 py-4 select-none hover:bg-slate-200" href="">
+      <a class="flex items-center gap-4 md:gap-5 px-5 md:px-6 py-4 select-none hover:bg-slate-200" href="{% url 'User:privacy_security' %}">
          <img src="{% static 'image/icons/lock.png' %}" class="w-6 h-6 md:w-7 md:h-7 filter-to-gray">
          <div>
             <h2 class="text-[15px] md:text-base 2xl:text-lg font-semibold">Privacy and Security</h2>
@@ -44,31 +45,39 @@
 
 <section class="w-11/12 md:w-5/6 mx-auto my-20">
    <h1 class="text-2xl sm:text-[28px] semi-lg:text-[32px] 2xl:text-[39px] font-bold mb-10">On Going Trasactions</h1>
-   {% with ''|center:4 as range %}
-   {% for _ in range %}
+   {% if on_going_transactions|length > 0 %}
+   {% for transaction in on_going_transactions %}
    <div class="w-full semi-lg:w-[90%] shadow-book-div rounded-lg mb-10 overflow-hidden">
       <div class="flex gap-3">
-         <div class="w-[132px] h-[176px] md:w-[150px] md:h-[200px] xl:w-[174px] xl:h-[232px] 2xl:w-[198px] 2xl:h-[264px] flex-shrink-0">
-            <img src="{% static 'image/books/' %}{{ forloop.counter }}.jpg" alt="Image Of 'Name' Book" class="object-cover rounded-sm">
+         <div
+            class="w-[132px] h-[176px] md:w-[150px] md:h-[200px] xl:w-[174px] xl:h-[232px] 2xl:w-[198px] 2xl:h-[264px] flex-shrink-0">
+            {% with transaction.book|find_main_image as book_main_image %}
+            <img src="{{ book_main_image.image.url }}" alt="Image Of '{{ book.name }}' Book"
+               class="object-cover rounded-sm">
+            {% endwith %}
          </div>
          <div class="p-4 w-full pr-6">
-            <h2 class="semi-lg:text-lg font-bold mb-2">How to Enjoy Your Life and Your Job - Dale Carnegie - Newest Edition(SPECIAL FORM)</h2>
-            <p class="text-[13px] md:text-[15px] italic my-1"><span class="font-bold">Address</span>: Jln. Durian No.116C</p>
-            <p class="text-[13px] md:text-[15px] italic my-1"><span class="font-bold">Payment</span>: Debit BCA</p>
-            <p class="text-[13px] md:text-[15px] italic my-1"><span class="font-bold">Arrival Estimation</span>: 30 September 2023</p>
+            <h2 class="semi-lg:text-lg font-bold mb-2">{{ transaction.book.name }}</h2>
+            <p class="text-[13px] md:text-[15px] italic my-1"><span class="font-bold">Address</span>: {{ transaction.address }}</p>
+            <p class="text-[13px] md:text-[15px] italic my-1"><span class="font-bold">Payment</span>: {{ transaction.payment_method }}</p>
+            <p class="text-[13px] md:text-[15px] italic my-1"><span class="font-bold">Shipment</span>: {{ transaction.shipment_method }}</p>
+            <p class="text-[13px] md:text-[15px] italic my-1"><span class="font-bold">Arrival Estimation</span>: 30
+               September 2023</p>
             <div class="hidden md:flex justify-between py-3">
-               <a href="" class="border border-red-600 rounded-sm py-2 px-7 text-sm text-red-600 transition-all hover:text-white hover:bg-red-500">Chat</a>
                <a href="" class="border border-red-600 rounded-sm py-2 px-4 text-sm text-red-600 transition-all hover:text-white hover:bg-red-500">Track Transaction</a>
             </div>
          </div>
       </div>
-      <div class="p-5 flex justify-between md:hidden">
-         <a href="" class="border border-red-600 rounded-sm py-2 px-7 text-sm text-red-600 transition-all hover:text-white hover:bg-red-500">Chat</a>
+      <div class="p-5 flex justify-end md:hidden">
          <a href="" class="border border-red-600 rounded-sm py-2 px-4 text-sm text-red-600 transition-all hover:text-white hover:bg-red-500">Track Transaction</a>
       </div>
    </div>
    {% endfor %}
-   {% endwith %}
+   {% else %}
+   <div class="pb-16">
+      <p>There is no transaction on going for now! <a href="{% url 'Library:main' %}" class="text-red-400">Click here</a> to buy new book.</p>
+   </div>
+   {% endif %}
 </section>
 
 <section class="w-11/12 md:w-5/6 mx-auto md:mt-10">

@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.utils import timezone
 from navigation.models import Category
 from Seller.models import Seller
 
@@ -33,9 +34,6 @@ class Book(models.Model):
    def __str__(self):
       return f"{self.name} | ${self.price}"
 
-   def save(self, *args, **kwargs):
-      super(Book, self).save(*args, **kwargs)
-
 
 class BookPicture(models.Model):
    image         = models.ImageField(upload_to='book_picture/')
@@ -51,9 +49,30 @@ class Transaction(models.Model):
    payment_method  = models.CharField(max_length=100)
    shipment_method = models.CharField(max_length=100)
    book            = models.ForeignKey(Book, on_delete=models.CASCADE)
-   user            = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
-   seller          = models.ForeignKey(User, on_delete=models.CASCADE, related_name='seller')
+   user            = models.ForeignKey(User, on_delete=models.CASCADE)
+   seller          = models.ForeignKey(Seller, on_delete=models.CASCADE)
    created_at      = models.DateTimeField(auto_now_add=True)
+   arrival_status  = models.CharField(max_length=50, default="Waiting For Confirmations")
+   arrive_date     = models.DateField(blank=True, null=True)
+   # Waiting For Confirmations
+   # Currently On Shipping
+   # Book Arrived!
+
    
    def __str__(self):
-      return f"{self.book.name} | {self.user.get_full_name} - {self.address}"
+      return f"{self.book.name} | {self.user.username} - {self.address}"
+
+   def save(self, *args, **kwargs):
+      if self.arrival_status == 'Book Arrived!':
+         self.arrive_date = timezone.now()
+      super(Transaction, self).save(*args, **kwargs)
+
+
+class FeedbackReport(models.Model):
+   name    = models.CharField(max_length=150)
+   email   = models.EmailField()
+   message = models.TextField()
+
+   def __str__(self):
+      return "Message from " + self.name
+

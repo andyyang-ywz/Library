@@ -1,0 +1,26 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Privacy And Security | Change your Password{% endblock %}
+
+{% block content %}
+<main class="w-11/12 md:w-5/6 mx-auto pt-24 md:pt-28 pb-20">
+   <h1 class="text-3xl font-bold text-red-500 mt-5">Change Your Current Password</h1>
+   <form method="post" class="w-[500px] mt-10">
+      {% csrf_token %}
+      <div class="mb-4">
+         <label for="id_current_password" class="font-semibold">Current Password: </label>
+         {{ form.current_password }}
+      </div>
+      <div class="mb-4">
+         <label for="id_new_password" class="font-semibold">New Password: </label>
+         {{ form.new_password }}
+      </div>
+      <div class="mb-4">
+         <label for="id_confirm_password" class="font-semibold">Confirm New Password: </label>
+         {{ form.confirm_password }}
+      </div>
+      <button class="border border-red-700 rounded-sm shadow-md mt-4 px-5 py-2 text-red-700 text-sm transition-all hover:bg-red-500 hover:text-white">Change Password!</button>
+   </form>
+</main>
+{% endblock %}

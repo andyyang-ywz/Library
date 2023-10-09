@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
+from django.core.validators import MinLengthValidator
+from django.contrib.auth import password_validation
 from .models import UserDetail
 
 class UserRegistrationForm(UserCreationForm):
@@ -82,3 +84,26 @@ class EditUserDetailForm(forms.ModelForm):
             'class': 'hidden'
          })
       }
+
+
+class ChangePasswordForm(forms.Form):
+   current_password = forms.CharField(max_length=128, widget=forms.PasswordInput(attrs=
+            {'class': 'w-full border border-neutral-500 p-2 mt-1 text-sm outline-none'}
+         ))
+   new_password = forms.CharField(max_length=128, widget=forms.PasswordInput(attrs=
+            {'class': 'w-full border border-neutral-500 p-2 mt-1 text-sm outline-none'}
+         ), validators=[MinLengthValidator(8)])
+   confirm_password = forms.CharField(max_length=128, widget=forms.PasswordInput(attrs=
+            {'class': 'w-full border border-neutral-500 p-2 mt-1 text-sm outline-none'}
+         ))
+
+   def clean_new_password(self):
+      new_password = self.cleaned_data.get('new_password')
+      try: 
+         password_validation.validate_password(new_password, self)
+      except forms.ValidationError as error:
+         self.add_error('new_password', error)
+
+      return new_password
+
+      

@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}Payment Code{% endblock %}
+
+{% block content %}
+
+<main class="flex justify-center items-center w-full min-h-screen pt-16">
+   <div class="w-[322px] text-center">
+      <img src="{% static 'image/payment_method' %}/{{ payment_logo_img }}" alt="Payment Method: {{ payment_method }}" class="h-12 mx-auto mb-5">
+      <h1 class="text-xl font-bold">Enter your Code: </h1>
+      <p class="font-bold text-3xl my-5" id="code_placeholder">_</p>
+      <div class="flex flex-wrap w-full border border-neutral-800 rounded-md overflow-hidden select-none" id="code_typer">
+         <div class="border-b border-r transition-all hover:bg-slate-200">1</div>
+         <div class="border-b transition-all hover:bg-slate-200">2</div>
+         <div class="border-l border-b transition-all hover:bg-slate-200">3</div>
+         <div class="border-b border-r transition-all hover:bg-slate-200">4</div>
+         <div class="border-b transition-all hover:bg-slate-200">5</div>
+         <div class="border-l border-b transition-all hover:bg-slate-200">6</div>
+         <div class="border-r transition-all hover:bg-slate-200">7</div>
+         <div class="transition-all hover:bg-slate-200">8</div>
+         <div class="border-l transition-all hover:bg-slate-200">9</div>
+         <div class="border-l transition-all hover:bg-slate-200">0</div>
+         <div class="border-l border-b transition-all hover:bg-slate-200" id="backspace_button">
+            <img src="{% static 'image/icons/arrow_right.png' %}" class="rotate-180 h-6 w-6">
+         </div>
+      </div>
+      <form method="post">
+         {% csrf_token %}
+         <button class="border border-green-700 px-5 py-2 mt-5 mx-auto text-green-700 text-sm rounded-sm transition-all hover:bg-green-600 hover:text-white">Purchase!</button>
+      </form>
+   </div>
+</main>
+
+<script>
+   $('#code_typer div').click(function()
+   {
+      let input = $(this).html()
+      let placeholder = $('#code_placeholder')
+      if(placeholder.html() == '_')
+      {
+         if(!$(this).is('#backspace_button'))
+         {
+            placeholder.html(input)
+         }
+      } else {
+         let current_input = placeholder.html()
+         if(!$(this).is('#backspace_button'))
+         {
+            if(current_input.length < 6)
+            {
+               placeholder.html(current_input + input)
+            }
+         } else {
+            if(current_input.length > 1)
+            {
+               placeholder.html( current_input.substring(0, current_input.length-1) )
+            } else {
+               placeholder.html('_')
+            }
+         }
+      }
+   })
+</script>
+
+{% endblock %}

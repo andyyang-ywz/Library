@@ -5,14 +5,14 @@
 
 {% block content %}
 <main class="w-11/12 md:w-5/6 mx-auto pt-24 md:pt-28 pb-20">
-   <h2 class="w-3/4 mx-auto mt-5 mb-8 text-4xl font-bold">Seller Account Creation Form</h2>
-   <form method="post" enctype="multipart/form-data" class="w-3/4 bg-neutral-700 rounded-xl shadow-xl mx-auto p-14 text-white">
+   <h2 class="w-full semi-lg:min-w-[700px] semi-lg:w-3/4 mx-auto mt-5 mb-8 text-3xl md:text-4xl font-bold">Seller Account Creation Form</h2>
+   <form method="post" enctype="multipart/form-data" class="w-full semi-lg:min-w-[700px] semi-lg:w-3/4 bg-neutral-700 rounded-xl shadow-xl mx-auto p-7 sm:p-10 md:p-14 text-white">
       {% csrf_token %}
-      <div class="flex gap-10">
+      <div class="semi-lg:flex gap-10">
          <div class="flex-shrink-0">
-            <label for="id_image" class="flex justify-center items-center w-44 h-44 bg-neutral-500 border-2 border-neutral-200 rounded-full cursor-pointer overflow-hidden">
+            <label for="id_image" class="flex justify-center items-center w-40 h-40 md:w-44 md:h-44 bg-neutral-500 border-2 border-neutral-200 rounded-full cursor-pointer overflow-hidden">
                <h2 class="text-xl" id="upload_image_button_h2">Upload image</h2>
-               <img src="" class="hidden w-44 h-44 rounded-full object-cover" id="uploaded_image">
+               <img src="" class="hidden w-40 h-40 md:w-44 md:h-44 rounded-full object-cover" id="uploaded_image">
             </label>
             {{ form.image }}
          </div>
@@ -40,24 +40,5 @@
    </form>
 </main>
 
-<script>
-   $(document).ready(function()
-   {
-      $('input[id=id_image]').change(function()
-      {
-         const file = this.files[0]
-         if(file)
-         {
-            const reader = new FileReader()
-            reader.onload = function(event)
-            {  
-               $('#uploaded_image').removeClass('hidden')
-               $('#uploaded_image').attr('src', event.target.result)
-               $('#upload_image_button_h2').addClass('hidden')
-            }
-            reader.readAsDataURL(file)
-         }
-      })
-   })
-</script>
+<script src="{% static 'js/seller.js' %}"></script>
 {% endblock %}

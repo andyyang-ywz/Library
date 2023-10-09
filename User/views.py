@@ -4,10 +4,12 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.contrib import messages
-from Library.models import Book
+from django.contrib.auth import authenticate
+from django.db.models import Q
+from Library.models import Book, Transaction
 from Seller.models import Seller
 from .models import UserDetail
-from .forms import UserRegistrationForm, LoginForm, EditUserForm, EditUserDetailForm
+from .forms import UserRegistrationForm, LoginForm, EditUserForm, EditUserDetailForm, ChangePasswordForm
 import os
 
 # Create your views here.
@@ -96,7 +98,6 @@ class SignInPage(LoginView):
 
    def get_success_url(self):
       messages.success(self.request, 'You have logged in to your account!')
-      print('f asdfk asd;f jas;kldfj ;adklsjf;alksjfajsfjas;jflajkslfaskjfl ')
       return reverse_lazy('Library:main')
 
 class LogoutPage(LogoutView):
@@ -108,6 +109,8 @@ class ProfilePage(TemplateView):
    def get_context_data(self, **kwargs):
       page_context = super().get_context_data()
       page_context['books'] = Book.objects.order_by('-id').all()[:10]
+      page_context['on_going_transactions'] = Transaction.objects.filter\
+                              (Q(arrival_status="Waiting For Confirmations") | Q(arrival_status="Currently On Shipping"))
       return page_context
 
 
@@ -154,6 +157,32 @@ class AboutAccountPage(FormView):
          'form2': form2
       })
 
+
+class PrivacySecurityPage(FormView):
+   template_name = 'user/privacy_security.html'
+
+   def get(self, request, *args, **kwargs):
+      return render(request, self.template_name, {
+         'form': ChangePasswordForm()
+      })
    
+   def post(self, request, *args, **kwargs):
+      form = ChangePasswordForm(request.POST)
+      if form.is_valid():
+         if form.cleaned_data.get('new_password') != form.cleaned_data.get('confirm_password'):
+            messages.error(request, 'Confirmation Password not valid! Please enter your new password again.')
+            return redirect('User:privacy_security')
+         if authenticate(request, username=request.user.username, password=form.cleaned_data.get('current_password')) is None:
+            messages.error(request, 'You current password is incorrect! Please try again!')
+            return redirect('User:privacy_security')
+         
+         request.user.set_password(form.cleaned_data.get('new_password'))
+         request.user.save()
+         messages.success(request, 'You password has been successfully updated!')
+         return redirect('User:profile')
+
+      return render(request, self.template_name, {
+         'form': form
+      })
 
 

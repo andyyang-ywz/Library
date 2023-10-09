@@ -5,14 +5,27 @@
 
 {% block content %}
 <main class="w-11/12 md:w-5/6 mx-auto pt-24 md:pt-28 pb-20">
-   <h1 class="mt-5 text-4xl font-bold">Upload Your Pictures for Your New Product</h1>
-   <div class="flex items-start gap-10 mt-10">
-      <div class="flex justify-center items-center w-[400px] aspect-[3_/_4] bg-neutral-600 rounded-md"></div>
-      <div class="flex flex-wrap items-start gap-4">
-         <div class="flex items-center justify-center w-[150px] aspect-[3_/_4] bg-neutral-700 rounded-md">
-            <img src="{% static 'image/icons/plus.png' %}" class="w-12 h-12 filter-to-gray2">
+   <h1 class="mt-5 text-3xl md:text-4xl 2xl:text-[38px] font-bold">Upload Your Pictures for Your New Product</h1>
+   <p class="mt-1">Product: {{ book_name }}</p>
+   <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="flex flex-col sm:flex-row items-start gap-5 md:gap-10 mt-10">
+         <div class="w-[360px] md:w-[400px] 2xl:w-[450px] aspect-[3_/_4] rounded-md overflow-hidden bg-neutral-600 shadow-around flex-shrink-0">
+            <img src="" class="hidden w-full h-full object-cover" alt="Main Product(Book) Image" id="main_image_preview">
+         </div>
+         <div class="flex flex-wrap items-start gap-4" id="image_list">
+            <label for="id_image1" class="flex items-center justify-center w-[125px] md:w-[150px] 2xl:w-[175px] aspect-[3_/_4] bg-neutral-700 border border-neutral-700 rounded-md cursor-pointer overflow-hidden">
+               <img src="{% static 'image/icons/plus.png' %}" class="w-12 h-12 filter-to-gray2">
+               <input type="file" name="image1" class="hidden" id="id_image1">
+            </label>
          </div>
       </div>
-   </div>
+      <div class="flex justify-between items-center mt-5">
+         <p class="text-sky-500">The first uploaded image will be the main image</p>
+         <button class="border border-neutral-800 rounded-sm py-2 px-7 text-sm transition-all hover:bg-neutral-800 hover:text-white">Upload Image and Product</button>
+      </div>
+   </form>
 </main>
+
+<script src="{% static 'js/seller.js' %}"></script>
 {% endblock %}
