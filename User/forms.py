@@ -4,7 +4,9 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.exceptions import ValidationError
 from django.core.validators import MinLengthValidator
 from django.contrib.auth import password_validation
+from Library.models import Transaction
 from .models import UserDetail
+
 
 class UserRegistrationForm(UserCreationForm):
    email = forms.EmailField(widget=forms.EmailInput(attrs=
@@ -107,3 +109,12 @@ class ChangePasswordForm(forms.Form):
       return new_password
 
       
+class SetAddressForm(forms.ModelForm):
+   class Meta:
+      model = Transaction
+      fields = ['address']
+      widgets = {
+         'address': forms.TextInput(attrs={
+            'class': 'w-full border border-neutral-600 rounded-sm mt-3 p-2 text-[13px] md:text-sm outline-none'
+         })
+      }

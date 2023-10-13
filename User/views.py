@@ -9,7 +9,7 @@ from django.db.models import Q
 from Library.models import Book, Transaction
 from Seller.models import Seller
 from .models import UserDetail
-from .forms import UserRegistrationForm, LoginForm, EditUserForm, EditUserDetailForm, ChangePasswordForm
+from .forms import UserRegistrationForm, LoginForm, EditUserForm, EditUserDetailForm, ChangePasswordForm, SetAddressForm
 import os
 
 # Create your views here.
@@ -109,7 +109,7 @@ class ProfilePage(TemplateView):
    def get_context_data(self, **kwargs):
       page_context = super().get_context_data()
       page_context['books'] = Book.objects.order_by('-id').all()[:10]
-      page_context['on_going_transactions'] = Transaction.objects.filter\
+      page_context['on_going_transactions'] = Transaction.objects.filter(user=self.request.user).filter\
                               (Q(arrival_status="Waiting For Confirmations") | Q(arrival_status="Currently On Shipping"))
       return page_context
 
@@ -184,5 +184,38 @@ class PrivacySecurityPage(FormView):
       return render(request, self.template_name, {
          'form': form
       })
+
+
+class SetAddressPage(FormView):
+   template_name = 'user/set_address.html'
+   form_class = SetAddressForm
+
+   def get(self, request, *args, **kwargs):
+      form = SetAddressForm()
+      if 'saved_address' in request.COOKIES:
+         form = SetAddressForm(initial={'address': request.COOKIES['saved_address']})
+
+      return render(request, self.template_name, {'form': form})
+         
+         
+
+   def post(self, request, *args, **kwargs):
+      messages.success(request, 'Location has been saved!')
+      response = redirect('User:profile')
+      response.set_cookie(key='saved_address', value=request.POST['address'], expires=60*60*24*365)
+      return response
+
+
+
+class TransactionHistory(TemplateView):
+   template_name = 'user/transaction_history.html'
+
+
+
+class UserCartList(TemplateView):
+   template_name = 'user/cart_list.html'
+
+
+
 
 

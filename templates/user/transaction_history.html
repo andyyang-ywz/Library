@@ -1,0 +1,80 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}Your Transaction History{% endblock %}
+
+{% block content %}
+
+<main class="w-11/12 md:w-4/5 semi-lg:w-2/3 mx-auto pt-24 md:pt-28 pb-20">
+   <h1 class="flex items-center gap-3 mt-3 mb-7 text-red-800">
+      <img src="{% static 'image/icons/history.png' %}" class="w-8 h-8 md:w-10 md:h-10 filter-to-red transition-all duration-300">
+      <span class="font-bold text-2xl md:text-[27px]">Your History</span>
+   </h1>
+   
+   {% if transaction_history|length > 0 %}
+   {% for transaction in transaction_history %}
+   <div class="shadow-book-div rounded-md overflow-hidden mb-6 transition-all hover:scale-[1.02]">
+      <div class="flex gap-2">
+         <div class="flex-shrink-0 w-[114px] h-[152px] md:w-[141px] md:h-[188px] 2xl:w-[165px] 2xl:h-[220px]">
+            {% with transaction.book|find_main_image as book_main_image %}
+            <img src="{{ book_main_image.image.url }}" alt="Image Of '{{ transaction.book.name }}' Book"
+               class="w-full h-full object-cover rounded-sm">
+            {% endwith %}
+         </div>
+         <div class="p-2 md:p-4">
+            <h2 class="text-[17px] sm:text-lg xl:text-[19px] 2xl:text-[22px] font-semibold transition-all hover:text-red-700">
+               <a href="{% url 'Library:book_detail' transaction.book.id %}">{{ transaction.book.name }}</a>
+            </h2>
+            <div class="flex gap-4 md:gap-8 text-xs sm:text-sm xl:text-base 2xl:text-[17px] italic my-1">
+               <div>
+                  <p class="my-[2px]">
+                     <span class="font-bold">Address</span>: {{ transaction.address }}
+                  </p>
+                  <p class="my-[2px]">
+                     <span class="font-bold">Arrival Date</span>: {{ transaction.arrive_date|date:'j F Y' }}
+                  </p>
+               </div>
+               <div>
+                  <p class="my-[2px]">
+                     <span class="font-bold">Shipment</span>: {{ transaction.shipment_method }}
+                  </p>
+                  <p class="my-[2px]">
+                     <span class="font-bold">Payment</span>: {{ transaction.payment_method }}
+                  </p>
+               </div>
+            </div>
+            <p class="my-1 text-sm md:text-lg 2xl:text-xl italic text-green-600">
+               <span class="text-xs">$</span><span class="pl-1 font-bold">{{ transaction.book.price }}</span>
+            </p>
+         </div>
+      </div>
+      <div class="flex justify-between px-6 py-4">
+         <div class="flex gap-2">
+            <p class="font-bold text-sm md:text-base 2xl:text-lg">245</p>
+            <img src="{% static 'image/icons/like.png' %}" class="w-4 h-4 2xl:w-5 2xl:h-5">
+         </div>
+         <div class="flex items-center gap-2">
+            <p class="pt-1 font-bold text-sm md:text-base 2xl:text-lg">4.8</p>
+            <div class="flex gap-1">
+               {% with ''|center:5 as range %}
+               {% for _ in range %}
+               {% if forloop.counter is not 5 %}
+               <img src="{% static 'image/icons/full-star.png' %}" class="w-4 h-4 2xl:w-5 2xl:h-5 filter-to-yellow">
+               {% else %}
+               <img src="{% static 'image/icons/half-star.png' %}" class="w-4 h-4 2xl:w-5 2xl:h-5 filter-to-yellow">
+               {% endif %}
+               {% endfor %}
+               {% endwith %}
+            </div>
+         </div>
+      </div>
+   </div>
+   {% endfor %}
+   {% else %}
+   <div class="border-t border-neutral-500 mt-10 pt-10 font-semibold text-lg md:text-xl">No transactions yet in your account. Purchase something until it has arrived and the transaction will
+      be recorded here.</div>
+   {% endif %}
+</main>
+
+{% endblock %}

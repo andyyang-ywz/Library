@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}{{ category_name }} Book | VLibrary{% endblock %}
+
+{% block content %}
+
+<main class="w-11/12 md:w-5/6 mx-auto py-28">
+   <div class="md:mt-4 mb-4">
+      <h1 class="font-bold text-2xl md:text-[27px] xl:text-3xl">Based On Category: {{ category_name }}</h1>
+   </div>
+   {% if books|length > 0 %}
+   {% include 'library/product_div.html' %}
+   {% else %}
+   <small class="font-semibold text-red-600 text-sm md:text-base">Book with this category are not currently available. Please check again next time.</small>
+   {% endif %}
+</main>
+
+{% endblock %}

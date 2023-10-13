@@ -21,7 +21,8 @@
 ::-webkit-scrollbar {
   width: 14px;
 }
-.small-scrollbar::-webkit-scrollbar {
+.small-scrollbar::-webkit-scrollbar,
+.gray-scrollbar::-webkit-scrollbar {
   width: 11px;
 }
 
@@ -32,6 +33,7 @@
 ::-webkit-scrollbar-track {
   background-color: #e7e5e4;
   border: 1px solid #a8a29e;
+  border-radius: 50px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -43,6 +45,19 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(0deg, #f97316, #b91c1c);
+}
+
+.gray-scrollbar::-webkit-scrollbar-track {
+  background-color: #e4e4e7;
+}
+
+.gray-scrollbar::-webkit-scrollbar-thumb {
+  background: #c0c0c7;
+  border: 1px solid #a8a29e;
+}
+
+.gray-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #b2b2bb;
 }
 
 #quotes_wrapper {
@@ -87,6 +102,10 @@
 .filter-to-red {
   filter: invert(13%) sepia(40%) saturate(6011%) hue-rotate(348deg)
     brightness(101%) contrast(94%);
+}
+.filter-to-red2 {
+  filter: invert(53%) sepia(51%) saturate(6543%) hue-rotate(336deg)
+    brightness(95%) contrast(97%);
 }
 
 .filter-parent:hover .hover-filter-green-to-white {

@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, DetailView, CreateView, FormView, View
 from django.contrib import messages
+from django.http import HttpResponse
+from navigation.models import Category
 from .models import Book, BookPicture, Transaction
 from .forms import TransactionForm, FeedbackReportForm
+import json
 
 
 # Create your views here.
@@ -58,8 +61,11 @@ class PurchasePage(FormView):
    form = TransactionForm
 
    def get(self, request, *args, **kwargs):
+      form_initial = {'shipment_method': 'Normal Shipment'}
+      if 'saved_address' in request.COOKIES:
+         form_initial['address'] = request.COOKIES['saved_address']
       return render(request, self.template_name, {
-         'form': TransactionForm(initial={'shipment_method': 'Normal Shipment'}),
+         'form': TransactionForm(initial=form_initial),
          'book': Book.objects.get(id=kwargs['book_id'])
       })
    
@@ -133,5 +139,40 @@ class FeedbackReportPage(CreateView):
       return render(request, self.template_name, {
          'form': form
       })
+
+
+def add_to_cart(request, book_id):
+   cart_arr = [int(book_id)]
+
+   if 'cart' in request.COOKIES:
+      print(request.COOKIES)
+      if request.COOKIES['cart'] == '':
+         cart_arr = []
+      else:
+         cart_arr = json.loads(request.COOKIES['cart'])
+      if book_id not in request.COOKIES['cart']:         
+         cart_arr.append(int(book_id))
+
+   cart_json = json.dumps(cart_arr)
+
+   response = HttpResponse('Cart Updated')
+   response.set_cookie(key='cart', value=cart_json, expires=60*60*24*365)
+   return response
+
+
+
+class CategoryBasedPage(TemplateView):
+   template_name = 'library/category_based.html'
+
+   def get_context_data(self, **kwargs):
+      page_context = super().get_context_data()
+      category = Category.objects.get(pk=kwargs['category_id'])
+      page_context['books'] = Book.objects.filter(category=category).order_by('-id')
+      page_context['category_name'] = category.name
+      return page_context
+
+   
+
+
 
 

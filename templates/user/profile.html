@@ -19,7 +19,7 @@
    </div>
    <div class="rounded-lg w-full md:w-[600px] lg:w-[700px] xl:w-[800px] 2xl:w-[900px] border border-red-300 mt-12 overflow-hidden">
       <div class="bg-red-500 px-5 py-3 text-white text-base md:text-lg font-semibold"><h2>Account Configuration</h2></div>
-      <a class="flex items-center gap-4 md:gap-5 px-5 md:px-6 py-4 select-none hover:bg-slate-200" href="">
+      <a class="flex items-center gap-4 md:gap-5 px-5 md:px-6 py-4 select-none hover:bg-slate-200" href="{% url 'User:set_address' %}">
          <img src="{% static 'image/icons/location.png' %}" class="w-6 h-6 md:w-7 md:h-7 filter-to-gray">
          <div>
             <h2 class="text-[15px] md:text-base 2xl:text-lg font-semibold">Set Adress</h2>
@@ -53,7 +53,7 @@
             class="w-[132px] h-[176px] md:w-[150px] md:h-[200px] xl:w-[174px] xl:h-[232px] 2xl:w-[198px] 2xl:h-[264px] flex-shrink-0">
             {% with transaction.book|find_main_image as book_main_image %}
             <img src="{{ book_main_image.image.url }}" alt="Image Of '{{ book.name }}' Book"
-               class="object-cover rounded-sm">
+               class="w-full h-full object-cover rounded-sm">
             {% endwith %}
          </div>
          <div class="p-4 w-full pr-6">
