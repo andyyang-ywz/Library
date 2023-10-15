@@ -108,7 +108,7 @@ class ProfilePage(TemplateView):
 
    def get_context_data(self, **kwargs):
       page_context = super().get_context_data()
-      page_context['books'] = Book.objects.order_by('-id').all()[:10]
+      page_context['books'] = Book.objects.filter(book_activated=1).order_by('-id').all()[:10]
       page_context['on_going_transactions'] = Transaction.objects.filter(user=self.request.user).filter\
                               (Q(arrival_status="Waiting For Confirmations") | Q(arrival_status="Currently On Shipping"))
       return page_context

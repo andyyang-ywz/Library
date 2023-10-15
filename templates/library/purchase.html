@@ -50,11 +50,11 @@
                   {{ form.shipment_method }}
                </div>
                <div class="relative border border-neutral-800 rounded-sm p-5 text-sm md:text-base cursor-pointer select-none" id="shipping_wrapper">
-                  <h2 class="font-semibold" id="shipping_selected">Normal Shipment ($2) (Estimated Time: 26 Oktober - 31 Oktober 2023)</h2>
+                  <h2 class="font-semibold" id="shipping_selected">Normal Shipment ($2) (Estimated Time: {{ estimation.normal }})</h2>
                   <div class="hidden absolute top-0 left-0 w-full bg-white border border-neutral-800 z-10" id="shipping_options">
-                     <option value="Fast Shipment" class="block w-full border-b border-neutral-500 p-5 transition-all hover:bg-[#ebebeb] cursor-pointer select-none whitespace-break-spaces">Fast Shipment ($4) (Estimated Time: 20 Oktober - 26 Oktober 2023)</option>
-                     <option value="Normal Shipment" class="block w-full border-b border-neutral-500 p-5 transition-all hover:bg-[#ebebeb] cursor-pointer select-none whitespace-break-spaces">Normal Shipment ($2) (Estimated Time: 26 Oktober - 31 Oktober 2023)</option>
-                     <option value="Slow Shipment" class="block w-full p-5 transition-all hover:bg-[#ebebeb] cursor-pointer select-none whitespace-break-spaces">Slow Shipment ($1) (Estimated Time: 29 Oktober - 4 November 2023)</option>
+                     <option value="Fast Shipment" class="block w-full border-b border-neutral-500 p-5 transition-all hover:bg-[#ebebeb] cursor-pointer select-none whitespace-break-spaces">Fast Shipment ($4) (Estimated Time: {{ estimation.fast }})</option>
+                     <option value="Normal Shipment" class="block w-full border-b border-neutral-500 p-5 transition-all hover:bg-[#ebebeb] cursor-pointer select-none whitespace-break-spaces">Normal Shipment ($2) (Estimated Time: {{ estimation.normal }})</option>
+                     <option value="Slow Shipment" class="block w-full p-5 transition-all hover:bg-[#ebebeb] cursor-pointer select-none whitespace-break-spaces">Slow Shipment ($1) (Estimated Time: {{ estimation.slow }})</option>
                   </div>
                </div>
             </div>

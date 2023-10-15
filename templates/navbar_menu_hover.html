@@ -67,26 +67,6 @@
                   </p>
                </div>
             </div>
-            <div class="flex justify-between px-6 py-4">
-               <div class="flex gap-2">
-                  <p class="font-bold text-sm">245</p>
-                  <img src="{% static 'image/icons/like.png' %}" class="w-4 h-4">
-               </div>
-               <div class="flex gap-2">
-                  <p class="font-bold text-sm">4.8</p>
-                  <div class="flex gap-1">
-                     {% with ''|center:5 as range %}
-                     {% for _ in range %}
-                     {% if forloop.counter is not 5 %}
-                     <img src="{% static 'image/icons/full-star.png' %}" class="w-4 h-4 filter-to-yellow">
-                     {% else %}
-                     <img src="{% static 'image/icons/half-star.png' %}" class="w-4 h-4 filter-to-yellow">
-                     {% endif %}
-                     {% endfor %}
-                     {% endwith %}
-                  </div>
-               </div>
-            </div>
          </div>
          {% endfor %}
          {% else %}
@@ -105,59 +85,8 @@
          <img src="{% static 'image/icons/cart.png' %}" class="w-5 h-5 filter-to-red transition-all duration-300">
          <span class="font-bold text-xl">Your Cart</span>
       </h2>
-      <div class="max-h-[420px] overflow-auto gray-scrollbar px-3">
-         {% if cart|length > 0 %}
-         {% for book in cart %}
-         <div class="shadow-book-div rounded-md overflow-hidden mb-4">
-            <div class="flex gap-2">
-               <div class="flex-shrink-0 w-[90px] h-[120px]">
-                  {% with book|find_main_image as book_main_image %}
-                  <img src="{{ book_main_image.image.url }}" alt="Image Of '{{ book.name }}' Book"
-                     class="w-full h-full object-cover rounded-sm">
-                  {% endwith %}
-               </div>
-               <div class="p-2">
-                  <h2 class="transition-all hover:text-red-700">
-                     <a href="{% url 'Library:book_detail' book.id %}">{{ book.name }}</a>
-                  </h2>
-                  <div class="my-1 text-sm italic">
-                     <p class="my-[2px]">
-                        <span class="font-bold">Author</span>: {{ book.author }}
-                     </p>
-                     <p class="my-[2px]">
-                        <span class="font-bold">Seller</span>: {{ book.seller.store_name }}
-                     </p>
-                  </div>
-                  <p class="my-[2px] text-green-600">
-                     <span class="text-xs">$</span><span class="pl-1 font-bold">{{ book.price }}</span>
-                  </p>
-               </div>
-            </div>
-            <div class="flex justify-between px-6 py-4">
-               <div class="flex gap-2">
-                  <p class="font-bold text-sm">245</p>
-                  <img src="{% static 'image/icons/like.png' %}" class="w-4 h-4">
-               </div>
-               <div class="flex gap-2">
-                  <p class="font-bold text-sm">4.8</p>
-                  <div class="flex gap-1">
-                     {% with ''|center:5 as range %}
-                     {% for _ in range %}
-                     {% if forloop.counter is not 5 %}
-                     <img src="{% static 'image/icons/full-star.png' %}" class="w-4 h-4 filter-to-yellow">
-                     {% else %}
-                     <img src="{% static 'image/icons/half-star.png' %}" class="w-4 h-4 filter-to-yellow">
-                     {% endif %}
-                     {% endfor %}
-                     {% endwith %}
-                  </div>
-               </div>
-            </div>
-         </div>
-         {% endfor %}
-         {% else %}
-         <div class="mt-2">Your cart is empty. Click the "Add to Cart" to add the book you want to purchase to your cart.</div>
-         {% endif %}
+      <div class="max-h-[420px] overflow-auto gray-scrollbar px-3" id="cart_list_wrapper">
+         {% include 'library/cart_list_hover.html' %}
       </div>
    </section>
 </div>

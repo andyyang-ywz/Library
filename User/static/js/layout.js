@@ -36,13 +36,10 @@ $(document).ready(function()
       {
          const book_id = $(this).data('book-id')
          const add_to_cart_button = $(this)
-         $.ajax({
-            url: '/library/book/add-to-cart/' + book_id,
-            success: function()
-            {
-               add_to_cart_button.toggleClass('hover:bg-green-500 hover:text-white text-green-600 text-white bg-green-500')
-               $('.add_to_cart_button img').eq(book_index).toggleClass('filter-to-green filter-to-white')
-            }
+         $('#cart_list_wrapper').load('/library/book/add-to-cart/' + book_id, function()
+         {
+            add_to_cart_button.toggleClass('hover:bg-green-500 hover:text-white text-green-600 text-white bg-green-500')
+            $('.add_to_cart_button img').eq(book_index).toggleClass('filter-to-green filter-to-white')
          })
       })
    })

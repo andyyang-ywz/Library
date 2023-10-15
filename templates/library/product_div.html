@@ -1,6 +1,6 @@
 {% load static %}
 {% load custom_tags %}
-<div class="flex gap-[2%] md:gap-[1%] semi-lg:gap-[2%] lg:gap-[1%] xl:gap-[2%] 2xl:gap-[0.5%] flex-wrap">
+<div class="flex items-start gap-[2%] md:gap-[1%] semi-lg:gap-[2%] lg:gap-[1%] xl:gap-[2%] 2xl:gap-[0.5%] flex-wrap">
    {% for book in books %}
    <div
       class="w-[48%] sm:w-[40%] md:w-[32%] lg:w-[24%] xl:w-[23%] 2xl:w-[19.5%] max-w-[240px] lg:max-w-[300px] mb-10 pb-5 shadow-book-div rounded-b-md group">
@@ -9,33 +9,13 @@
          <img src="{{ book_main_image.image.url }}" alt="Image Of {{ book.name }}"
          class="w-full h-full object-cover transition-all group-hover:scale-105">
          {% endwith %}
-         {% if forloop.counter == 1 %}
-         <div class="absolute top-3 left-0 bg-red-400 px-4 py-2 text-neutral-800 font-bold text-sm md:text-base">Best
-            Selling</div>
-         {% endif %}
-         <div
-            class="absolute bottom-0 right-0 flex items-center gap-3 bg-neutral-800 px-5 py-3 md:py-4 rounded-tl-sm transition-all opacity-0 group-hover:opacity-100">
-            <span class="text-white text-sm">244</span>
-            <img src="{% static 'image/icons/like.png' %}" alt="Like Button" class="w-4 md:w-5 filter-to-white">
-         </div>
       </div>
       <div class="p-3">
          <h1 class="font-bold mb-2 text-[15px] sm:text-base semi-lg:text-lg hover:text-red-800 transition-all"><a
                href="{% url 'Library:book_detail' book.id %}">{{ book.name }}</a></h1>
-         <div aria-label="book_rating" class="flex gap-1 mb-2">
-            <span class="font-bold text-sm pr-1">4.3</span>
-            {% with ''|center:5 as range %}
-            {% for _ in range %}
-            {% if forloop.counter is not 5 %}
-            <img src="{% static 'image/icons/full-star.png' %}" class="w-4 h-4 filter-to-yellow">
-            {% else %}
-            <img src="{% static 'image/icons/half-star.png' %}" class="w-4 h-4 filter-to-yellow">
-            {% endif %}
-            {% endfor %}
-            {% endwith %}
-         </div>
          <b class="block mb-2 text-sm text-green-600">$<span class="inline-block text-lg md:text-xl pl-1">{{ book.price }}</span></b>
 
+         {% if user != book.seller.user %}
          {% if book.id|in_cart:request.COOKIES.cart %}
          <button
             class="flex items-center gap-3 bg-green-500 border border-green-500 rounded-md text-white px-5 py-2 text-xs semi-lg:text-base transition-all duration-300 add_to_cart_button"
@@ -48,6 +28,7 @@
             <img src="{% static 'image/icons/cart.png' %}" class="w-3 h-3 filter-to-green hover-filter-green-to-white transition-all duration-300">
             <span>Add To Cart</span>
          </button>
+         {% endif %}
          {% endif %}
       </div>
    </div>

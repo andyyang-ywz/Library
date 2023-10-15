@@ -23,20 +23,24 @@ class NewProductForm(forms.ModelForm):
          'price': forms.TextInput(attrs={'class': 'coma-regexed block w-full border border-slate-500 px-3 py-2 text-sm outline-none'}),
       }
 
-class NewSellerForm(forms.ModelForm):
+class SellerDataForm(forms.ModelForm):
    class Meta:
       model = Seller
-      fields = ['store_name', 'image', 'desc', 'location']
+      fields = ['store_name', 'phone_number','image', 'desc', 'location']
       widgets = {
          'store_name': forms.TextInput(attrs={
-            'class': 'w-full bg-transparent border-b border-slate-200 my-5 p-2 text-xl md:text-2xl placeholder:text-neutral-300 outline-none',
-            'placeholder': 'Input Your Name',
+            'class': 'w-full bg-transparent border-b border-slate-500 pb-1 placeholder:text-neutral-400 outline-none',
+            'placeholder': 'Input Your Store Name',
             'autocomplete': 'off'
          }),
-         'desc': forms.Textarea(attrs={'class': 'w-full bg-neutral-600 mt-2 p-3 text-[15px] md:text-base resize-none outline-none'}),
+         'phone_number': forms.TextInput(attrs={
+            'class': 'block w-full border border-neutral-500 outline-none p-2 text-sm',
+            'placeholder': 'enter a valid phone number'
+         }),
+         'desc': forms.Textarea(attrs={'class': 'w-full border border-neutral-500 rounded-sm p-3 outline-none resize-none'}),
          'image': forms.FileInput(attrs={'class': 'hidden'}),
          'location': forms.TextInput(attrs={
-            'class': 'w-4/5 semi-lg:w-[290px] bg-neutral-200 rounded-sm px-2 py-[6px] text-[13px] md:text-sm text-black outline-none',
+            'class': 'block w-full border border-neutral-500 outline-none p-2 text-sm',
             'placeholder': 'your location'
          })
       }

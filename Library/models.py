@@ -30,6 +30,7 @@ class Book(models.Model):
    price          = models.DecimalField(decimal_places=2, max_digits=10,validators=[minimum_price])
    created_at     = models.DateTimeField(auto_now_add=True)
    seller         = models.ForeignKey(Seller, on_delete=models.CASCADE, blank=True)
+   book_activated = models.BooleanField(default=0)
 
    def __str__(self):
       return f"{self.name} | ${self.price}"
@@ -75,4 +76,13 @@ class FeedbackReport(models.Model):
 
    def __str__(self):
       return "Message from " + self.name
+
+
+class BookRating(models.Model):
+   user   = models.ForeignKey(User, on_delete=models.CASCADE)
+   book   = models.ForeignKey(Book, on_delete=models.CASCADE)
+   rating = models.FloatField()
+
+   def __str__(self):
+      return f"{self.rating} for {self.book.name} | by {self.user.username}"
 

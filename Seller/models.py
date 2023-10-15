@@ -6,6 +6,7 @@ from User.models import User
 class Seller(models.Model):
    user           = models.OneToOneField(User, primary_key=True, on_delete=models.CASCADE, related_name='seller_account')
    store_name     = models.CharField(max_length=100)
+   phone_number   = models.CharField(max_length=12)
    desc           = models.TextField()
    image          = models.ImageField(upload_to='store_picture/', null=False)
    location       = models.CharField(max_length=150)

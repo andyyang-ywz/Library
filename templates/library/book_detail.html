@@ -2,7 +2,7 @@
 {% load static %}
 {% load custom_tags %}
 
-{% block title %}Detail: {% endblock %}
+{% block title %}Detail: {{ book.name }}{% endblock %}
 
 {% block content %}
 <main>
@@ -15,25 +15,13 @@
          <button class="absolute top-5 right-5 border border-neutral-800 rounded-sm bg-white px-5 py-2 text-sm transition-all hover:bg-neutral-800 hover:text-white" id="toggle_other_image">Other Image</button>
          {% endif %}
       </div>
-      <div class="mt-10 md:mt-0">
+      <div class="w-full mt-10 md:mt-0">
          <div class="border-b border-neutral-700 pb-5">
             <h1 class="text-[27px] md:text-[32px] semi-lg:text-4xl 2xl:text-[42px] font-bold">{{ book.name }}</h1>
-            <div aria-label="book_rating" class="flex gap-1 my-2">
-               <span class="font-bold semi-lg:text-lg pr-1">4.3</span>
-               {% with ''|center:5 as range %}
-               {% for _ in range %}
-                  {% if forloop.counter is not 5 %}
-                  <img src="{% static 'image/icons/full-star.png' %}" class="w-5 semi-lg:w-6 h-5 semi-lg:h-6 filter-to-yellow">
-                  {% else %}
-                  <img src="{% static 'image/icons/half-star.png' %}" class="w-5 semi-lg:w-6 h-5 semi-lg:h-6 filter-to-yellow">
-                  {% endif %}
-               {% endfor %}
-               {% endwith %}
-               <span class="semi-lg:text-lg text-slate-500 pl-4">from 254 rates</span>
-            </div>
-            <div class="flex gap-2">
-               <span class="semi-lg:text-lg font-bold">46</span>
-               <img src="{% static 'image/icons/like.png' %}" class="w-6 h-6">
+            <div class="flex items-center gap-4 mt-5">
+               <img src="{{ book.seller.image.url }}" alt="Seller Profile - {{ book.seller.store_name }}"
+                  class="w-10 h-10 2xl:w-11 2xl:h-11 rounded-full object-cover">
+               <h2 class="font-semibold text-base 2xl:text-lg">{{ book.seller.store_name }}</h2>
             </div>
          </div>
          <div class="mt-2">
@@ -45,14 +33,21 @@
                   </h2>
                </div>
                <div class="flex gap-2 mt-5">
+                  {% if book.seller.user != user %}
                   <a href="{% url 'Library:purchase' book.id %}" class="flex items-center gap-3 border border-green-500 rounded-md text-green-600 px-5 py-2 text-sm semi-lg:text-base transition-all duration-300 hover:bg-green-500 hover:text-white filter-parent">
                      <img src="{% static 'image/icons/arrow_right.png' %}" class="w-4 h-4 filter-to-green hover-filter-green-to-white transition-all duration-300">
                      <span>Buy Now</span>
                   </a>
-                  <button class="flex items-center gap-3 border border-green-500 rounded-md text-green-600 px-5 py-2 text-sm semi-lg:text-base transition-all duration-300 hover:bg-green-500 hover:text-white filter-parent">
+                  <button class="flex items-center gap-3 border border-green-500 rounded-md text-green-600 px-5 py-2 text-sm semi-lg:text-base transition-all duration-300 hover:bg-green-500 hover:text-white filter-parent add_to_cart_button" data-book-id="{{ book.id }}">
                      <img src="{% static 'image/icons/cart.png' %}" class="w-4 h-4 filter-to-green hover-filter-green-to-white transition-all duration-300">
                      <span>Add To Cart</span>
                   </button>
+                  {% else %}
+                  <a href="{% url 'Seller:edit_product' book.id %}" class="flex items-center gap-3 border border-green-500 rounded-md text-green-600 px-5 py-2 text-sm semi-lg:text-base transition-all duration-300 hover:bg-green-500 hover:text-white filter-parent">
+                     <img src="{% static 'image/icons/pencil.png' %}" class="w-4 h-4 filter-to-green hover-filter-green-to-white transition-all duration-300">
+                     <span>Edit Product</span>
+                  </a>
+                  {% endif %}
                </div>
             </div>
             <div class="mt-5">

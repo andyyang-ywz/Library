@@ -76,8 +76,13 @@
    <section class="mt-24 text-sm md:text-base">
       <h1 class="font-bold text-[32px] md:text-4xl">About Account</h1>
       <div class="mt-10">
-         <p class="font-semibold mb-5">Your account is a user-statused account. Your role is a user for this webiste and as a buyer for book sellers. But you can be a seller by making a channel for yourself. If your role is a seller-statused account, you will still be able to buy books from other store, but you won't be able to give likes and give ratings. And surely, your role as a seller is to have product, so you must have at least 1 product before your channel gets publicized. Click this button below to get your seller status and upload your first product.</p>
+         {% if is_seller %}
+         <p class="font-semibold mb-5">Your account is a seller account. Your role is a seller, but you can still buy other seller's product. You can view your channel by clicking the button below(only if your account has been publicized)</p>
+         <a href="{% url 'Seller:account' user.id %}" class="border border-green-700 rounded-sm py-2 px-6 text-[13px] md:text-sm text-green-700 transition-all hover:text-white hover:bg-green-700">View Seller Account</a>
+         {% else %}
+         <p class="font-semibold mb-5">Your account is a user-statused account. Your role is a user for this webiste and as a buyer for book sellers. But you can be a seller by making a channel for yourself. If your role is a seller-statused account, you will still be able to buy books from other store. And surely, your role as a seller is to have product, so you must have at least 1 product before your channel gets publicized. Click this button below to get your seller status and upload your first product.</p>
          <a href="{% url 'Seller:open_seller_account' %}" class="border border-green-700 rounded-sm py-2 px-6 text-[13px] md:text-sm text-green-700 transition-all hover:text-white hover:bg-green-700">Create Seller Account</a>
+         {% endif %}
       </div>
       <div class="mt-10">
          <p class="font-semibold mb-5">As a user, we would like to know your feedbacks to help us grow our website. If you have any problem with our website, feel free to click this button below to report your problems. Just a feedback will also help.</p>

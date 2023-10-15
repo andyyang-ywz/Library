@@ -1,6 +1,6 @@
 from django.db.models import Q
-from User.models import UserDetail
 from Library.models import Book, Transaction
+from Seller.models import Seller
 from .models import Category
 import json
 
@@ -19,11 +19,15 @@ def context_processor(request):
 
    if 'cart' in request.COOKIES:
       cart_arr = json.loads(request.COOKIES['cart'])
-      print(cart_arr)
       cart = []
       for x in cart_arr:
          cart.append(Book.objects.get(pk=x))
       page_context['cart'] = cart
 
+   try:
+      Seller.objects.get(user=request.user)
+      page_context['is_seller'] = True
+   except:
+      page_context['is_seller'] = False
       
    return page_context

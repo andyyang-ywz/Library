@@ -4,38 +4,48 @@
 {% block title %}Open Your New Seller Account. Be a VLibrary Seller Now!{% endblock %}
 
 {% block content %}
-<main class="w-11/12 md:w-5/6 mx-auto pt-24 md:pt-28 pb-20">
-   <h2 class="w-full semi-lg:min-w-[700px] semi-lg:w-3/4 mx-auto mt-5 mb-8 text-3xl md:text-4xl font-bold">Seller Account Creation Form</h2>
-   <form method="post" enctype="multipart/form-data" class="w-full semi-lg:min-w-[700px] semi-lg:w-3/4 bg-neutral-700 rounded-xl shadow-xl mx-auto p-7 sm:p-10 md:p-14 text-white">
+<main class="pt-16 md:pt-20 pb-16">
+   <div class="w-full h-60 bg-red-200"></div>
+   <form class="w-5/6 bg-white shadow-heavy-down rounded-md mx-auto -mt-[10rem] px-5 py-10 md:p-10" method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      <div class="semi-lg:flex gap-10">
-         <div class="flex-shrink-0">
-            <label for="id_image" class="flex justify-center items-center w-40 h-40 md:w-44 md:h-44 bg-neutral-500 border-2 border-neutral-200 rounded-full cursor-pointer overflow-hidden">
-               <h2 class="text-xl" id="upload_image_button_h2">Upload image</h2>
-               <img src="" class="hidden w-40 h-40 md:w-44 md:h-44 rounded-full object-cover" id="uploaded_image">
-            </label>
-            {{ form.image }}
-         </div>
-         <div class="w-full">
-            {{ form.store_name }}
-            <div>
-               <p class="my-2">Location : {{ form.location }}</p>
-               <p>Joined At : Soon</p>
-            </div>
+      <div class="md:flex gap-10">
+         <label class="flex justify-center items-center w-44 h-44 lg:w-52 lg:h-52 border-2 border-neutral-500 rounded-full cursor-pointer overflow-hidden flex-shrink-0" for="id_image">
+            <span class="text-xl" id="upload_image_button_h2">Upload image</span>
+            <img src="" class="w-full h-full rounded-full object-cover hidden" id="uploaded_image">
+         </label>
+         {{ form.image }}
+         <div class="w-full lg:w-3/5 pt-10">
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-4">
+               {{ form.store_name }}
+            </h1>
+            <table class="w-full lg:text-lg">
+               <tr>
+                  <td class="w-[110px] md:w-[130px]">Location</td>
+                  <td class="w-[10px] px-5 py-2">:</td>
+                  <td>{{ form.location }}</td>
+               </tr>
+               <tr>
+                  <td class="w-[110px] md:w-[130px]">Phone Number</td>
+                  <td class="w-[10px] px-5 py-2">:</td>
+                  <td>{{ form.phone_number }}</td>
+               </tr>
+            </table>
          </div>
       </div>
-      <div class="pt-2">
-         <small class="block my-2 text-red-400">{{ form.image.errors }}</small>
-         <small class="block my-2 text-red-400">{{ form.store_name.errors }}</small>
-         <small class="block my-2 text-red-400">{{ form.location.errors }}</small>
+      <div class="mb-10 mt-4 md:px-5">
+         <small class="text-base text-red-600">{{ form.image.errors }}</small>
+         <small class="text-base text-red-600">{{ form.location.errors }}</small>
+         <small class="text-base text-red-600">{{ form.phone_number.errors }}</small>
       </div>
-      <div class="mt-7">
-         <label for="" class="text-lg font-semibold">Seller Description :</label>
+      <div class="mt-10 mb-4 md:px-5">
+         <h2 class="font-semibold text-xl mb-2">Description: </h2>
          {{ form.desc }}
-         <small class="block my-2 text-red-400">{{ form.desc.errors }}</small>
+         <small class="text-base text-red-600">{{ form.desc.errors }}</small>
       </div>
-      <div class="flex justify-end mt-5 text-black">
-         <button class="bg-white rounded-sm px-7 py-2 text-sm transition-all hover:bg-neutral-200">Be A Seller! </button>
+      <div class="flex justify-end mb-4 md:px-5">
+         <button class="border border-neutral-500 px-7 py-2 text-sm hover:text-white hover:bg-neutral-800">
+            Become A Seller
+         </button>
       </div>
    </form>
 </main>

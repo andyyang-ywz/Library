@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from navigation.models import Category
 from .models import Book, BookPicture, Transaction
 from .forms import TransactionForm, FeedbackReportForm
+from datetime import datetime, timedelta
 import json
 
 
@@ -12,10 +13,15 @@ import json
 class MainIndex(TemplateView):
    template_name = 'library/index.html'
 
-   def get_context_data(self, **kwargs):
-      page_context = super().get_context_data()
-      page_context['books'] = Book.objects.all().order_by('-id')
-      return page_context
+   def get(self, request, *args, **kwargs):
+      books = Book.objects.filter(book_activated=1).order_by('-id')
+
+      if 'search' in request.GET:
+         books = Book.objects.filter(book_activated=1, name__contains=request.GET['search']).order_by('-id')
+      
+      return render(request, self.template_name, {
+         'books': books
+      })
 
 class BookDetailPage(DetailView):
    template_name = 'library/book_detail.html'
@@ -23,25 +29,26 @@ class BookDetailPage(DetailView):
 
    def get_recommended_book(self, book):
       query_1 = Book.objects.\
-               filter(category=book.category).\
+               filter(category=book.category, book_activated=1).\
                order_by('-id').\
                exclude(id=book.id)[:10]
 
       additional_book = 10 - len(query_1)
       
       query_2 = Book.objects.\
-               exclude(category=book.category).\
+               exclude(category=book.category, book_activated=1).\
                order_by('-id')[:additional_book]
 
       return query_1.union(query_2)
 
-   def get_context_data(self, **kwargs):
-      page_context = super().get_context_data()
-      book = page_context['book']
-      page_context['books'] = self.get_recommended_book(book)
-      page_context['book_pictures'] = BookPicture.objects.filter(book=book).order_by('-is_main_image')
+   def get(self, request, *args, **kwargs):
+      try: 
+         book = Book.objects.filter(book_activated=1).get(pk=kwargs['pk'])
+      except:
+         messages.error(request, "The book you are searching is not found!")
+         return redirect("Library:main")
 
-      page_context['details'] = [
+      details = [
          {'title': 'Author'        , 'value': book.author},
          {'title': 'Category'      , 'value': book.category.name},
          {'title': 'Publisher'     , 'value': book.publisher},
@@ -52,7 +59,14 @@ class BookDetailPage(DetailView):
          {'title': 'Size'          , 'value': book.size + ' cm'},
          {'title': 'Serial Number' , 'value': book.serial_number}
       ]
-      return page_context
+
+      return render(request, self.template_name, {
+         'book': book,
+         'books': self.get_recommended_book(book),
+         'book_pictures': BookPicture.objects.filter(book=book).order_by('-is_main_image'),
+         'details': details
+      })
+
 
 
 
@@ -60,14 +74,35 @@ class PurchasePage(FormView):
    template_name = 'library/purchase.html'
    form = TransactionForm
 
+   def get_estimation_arrival(self):
+      tday = datetime.today()
+
+      def to_date(value):
+         return (tday + timedelta(days=value)).strftime('%#d %B %Y')
+
+      return {
+         'fast': to_date(3) + ' - ' + to_date(5),
+         'normal': to_date(5) + ' - ' + to_date(7),
+         'slow': to_date(8) + ' - ' + to_date(11)
+      }
+
+
    def get(self, request, *args, **kwargs):
-      form_initial = {'shipment_method': 'Normal Shipment'}
-      if 'saved_address' in request.COOKIES:
-         form_initial['address'] = request.COOKIES['saved_address']
-      return render(request, self.template_name, {
-         'form': TransactionForm(initial=form_initial),
-         'book': Book.objects.get(id=kwargs['book_id'])
-      })
+      book = Book.objects.get(id=kwargs['book_id'])
+
+      if book.seller.user != request.user:
+         form_initial = {'shipment_method': 'Normal Shipment'}
+         if 'saved_address' in request.COOKIES:
+            form_initial['address'] = request.COOKIES['saved_address']
+         return render(request, self.template_name, {
+            'form': TransactionForm(initial=form_initial),
+            'book': book,
+            'estimation': self.get_estimation_arrival()
+         })
+
+      messages.warning(request, "WARNING: You cannot purchase your own product!")
+      
+      return redirect('Library:main')
    
    def post(self, request, *args, **kwargs):
       validated_data = {
@@ -142,22 +177,36 @@ class FeedbackReportPage(CreateView):
 
 
 def add_to_cart(request, book_id):
-   cart_arr = [int(book_id)]
+   book = Book.objects.filter(book_activated=1, id=book_id)
 
-   if 'cart' in request.COOKIES:
-      print(request.COOKIES)
-      if request.COOKIES['cart'] == '':
-         cart_arr = []
-      else:
-         cart_arr = json.loads(request.COOKIES['cart'])
-      if book_id not in request.COOKIES['cart']:         
-         cart_arr.append(int(book_id))
+   if book.seller.user != request.user:
+      cart_arr = [int(book_id)]
 
-   cart_json = json.dumps(cart_arr)
+      if 'cart' in request.COOKIES:
+         print(request.COOKIES)
+         if request.COOKIES['cart'] == '':
+            cart_arr = []
+         else:
+            cart_arr = json.loads(request.COOKIES['cart'])
 
-   response = HttpResponse('Cart Updated')
-   response.set_cookie(key='cart', value=cart_json, expires=60*60*24*365)
-   return response
+         if book_id not in request.COOKIES['cart']:         
+            cart_arr.append(int(book_id))
+         else:
+            cart_arr.remove(int(book_id))
+
+      cart_json = json.dumps(cart_arr)
+
+      cart = []
+      for x in cart_arr:
+         cart.append(Book.objects.get(pk=x))
+
+      response = render(request, 'library/cart_list_hover.html', {
+         'cart': cart
+      })
+      response.set_cookie(key='cart', value=cart_json, expires=60*60*24*365)
+      return response
+      
+   return False
 
 
 
@@ -167,7 +216,7 @@ class CategoryBasedPage(TemplateView):
    def get_context_data(self, **kwargs):
       page_context = super().get_context_data()
       category = Category.objects.get(pk=kwargs['category_id'])
-      page_context['books'] = Book.objects.filter(category=category).order_by('-id')
+      page_context['books'] = Book.objects.filter(category=category, book_activated=1).order_by('-id')
       page_context['category_name'] = category.name
       return page_context
 

@@ -1,0 +1,35 @@
+{% load static %}
+{% load custom_tags %}
+
+{% if cart|length > 0 %}
+{% for book in cart %}
+<div class="shadow-book-div rounded-md overflow-hidden mb-4">
+   <div class="flex gap-2">
+      <div class="flex-shrink-0 w-[90px] h-[120px]">
+         {% with book|find_main_image as book_main_image %}
+         <img src="{{ book_main_image.image.url }}" alt="Image Of '{{ book.name }}' Book"
+            class="w-full h-full object-cover rounded-sm">
+         {% endwith %}
+      </div>
+      <div class="p-2">
+         <h2 class="transition-all hover:text-red-700">
+            <a href="{% url 'Library:book_detail' book.id %}">{{ book.name }}</a>
+         </h2>
+         <div class="my-1 text-sm italic">
+            <p class="my-[2px]">
+               <span class="font-bold">Author</span>: {{ book.author }}
+            </p>
+            <p class="my-[2px]">
+               <span class="font-bold">Seller</span>: {{ book.seller.store_name }}
+            </p>
+         </div>
+         <p class="my-[2px] text-green-600">
+            <span class="text-xs">$</span><span class="pl-1 font-bold">{{ book.price }}</span>
+         </p>
+      </div>
+   </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="mt-2">Your cart is empty. Click the "Add to Cart" to add the book you want to purchase to your cart.</div>
+{% endif %}

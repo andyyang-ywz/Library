@@ -19,6 +19,22 @@
    </div>
    <div class="rounded-lg w-full md:w-[600px] lg:w-[700px] xl:w-[800px] 2xl:w-[900px] border border-red-300 mt-12 overflow-hidden">
       <div class="bg-red-500 px-5 py-3 text-white text-base md:text-lg font-semibold"><h2>Account Configuration</h2></div>
+      {% if is_seller %}
+      <a class="flex items-center gap-4 md:gap-5 px-5 md:px-6 py-4 select-none hover:bg-slate-200" href="{% url 'Seller:account' user.id %}">
+         <img src="{% static 'image/icons/account.png' %}" class="w-6 h-6 md:w-7 md:h-7 filter-to-gray">
+         <div>
+            <h2 class="text-[15px] md:text-base 2xl:text-lg font-semibold">View Seller Account</h2>
+            <p class="text-sm md:text-[15px] 2xl:text-base text-slate-600 italic">View your seller channel and see all your uploaded product.</p>
+         </div>
+      </a>
+      <a class="flex items-center gap-4 md:gap-5 px-5 md:px-6 py-4 select-none hover:bg-slate-200" href="{% url 'Seller:customer_orders' %}">
+         <img src="{% static 'image/icons/order.png' %}" class="w-6 h-6 md:w-7 md:h-7 filter-to-gray">
+         <div>
+            <h2 class="text-[15px] md:text-base 2xl:text-lg font-semibold">Customer's Order</h2>
+            <p class="text-sm md:text-[15px] 2xl:text-base text-slate-600 italic">View your customers order. Give your customers confirmation from new order.</p>
+         </div>
+      </a>
+      {% endif %}
       <a class="flex items-center gap-4 md:gap-5 px-5 md:px-6 py-4 select-none hover:bg-slate-200" href="{% url 'User:set_address' %}">
          <img src="{% static 'image/icons/location.png' %}" class="w-6 h-6 md:w-7 md:h-7 filter-to-gray">
          <div>
@@ -58,13 +74,11 @@
          </div>
          <div class="p-4 w-full pr-6">
             <h2 class="semi-lg:text-lg font-bold mb-2">{{ transaction.book.name }}</h2>
-            <p class="text-[13px] md:text-[15px] italic my-1"><span class="font-bold">Address</span>: {{ transaction.address }}</p>
-            <p class="text-[13px] md:text-[15px] italic my-1"><span class="font-bold">Payment</span>: {{ transaction.payment_method }}</p>
-            <p class="text-[13px] md:text-[15px] italic my-1"><span class="font-bold">Shipment</span>: {{ transaction.shipment_method }}</p>
-            <p class="text-[13px] md:text-[15px] italic my-1"><span class="font-bold">Arrival Estimation</span>: 30
-               September 2023</p>
-            <div class="hidden md:flex justify-between py-3">
-               <a href="" class="border border-red-600 rounded-sm py-2 px-4 text-sm text-red-600 transition-all hover:text-white hover:bg-red-500">Track Transaction</a>
+            <div class="text-[13px] md:text-[15px] italic">
+               <p class="my-1"><span class="font-bold">Address</span>: {{ transaction.address }}</p>
+               <p class="my-1"><span class="font-bold">Payment</span>: {{ transaction.payment_method }}</p>
+               <p class="my-1"><span class="font-bold">Shipment</span>: {{ transaction.shipment_method }}</p>
+               <p class="my-1"><span class="font-bold">Status</span>: {{ order.arrival_status }}</p>
             </div>
          </div>
       </div>

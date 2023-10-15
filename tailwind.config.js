@@ -13,7 +13,8 @@ module.exports = {
          'shining-red': '0 -5px 30px 5px rgba(200,40,40,0.5)',
          'shining-red-small': '0 0 15px 2px rgba(200,40,40,0.5)',
          'down-red': '0 15px 30px -5px rgba(200,40,40,0.62)',
-         'book-div': '0 0 6px -1px rgba(0,0,0,0.3)'
+         'book-div': '0 0 7px -1px rgba(0,0,0,0.3)',
+         'heavy-down': '0 3px 15px -2px rgba(0,0,0,0.3)',
       },
       screens: {
          'semi-lg': '880px'
